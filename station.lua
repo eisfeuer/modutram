@@ -1,4 +1,4 @@
-local Config = require('modutram.Config')
+local Config = require('modutram.Config.Config')
 
 local Station = {}
 

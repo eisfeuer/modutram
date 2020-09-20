@@ -1,4 +1,6 @@
 return {
+    VOID = 0,
+
     TRAM_BIDIRECTIONAL = 8,
     TRAM_UP = 9,
     TRAM_DOWN = 10,

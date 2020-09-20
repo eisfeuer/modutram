@@ -1,15 +1,10 @@
 local merge = require('modutram.helper.merge')
+local defaults = require('modutram.Config.defaults')
 
 local Config = {}
 
 function Config:new(o)
     o = o or {}
-
-    local defaults = {
-        gridModuleLength = 18,
-        baseHeight = 0
-    }
-
     o = merge(defaults, o)
     
     setmetatable(o, self)

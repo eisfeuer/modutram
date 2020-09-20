@@ -72,6 +72,12 @@ describe("GridModule", function()
         end)
     end)
 
+    describe("getXPosInCm", function ()
+        it ('returns the X Position in centimeters', function ()
+            assert.are.equal(280, gridModule:getXPosInCm())
+        end)
+    end)
+
     describe("getOption", function ()
         it ('returns option', function ()
             assert.are.equal(0.96, gridModule:getOption('platformHeight', 0.55))
@@ -87,6 +93,17 @@ describe("GridModule", function()
 
         it ('returns value from module data', function ()
             assert.are.equal(42, gridModule:getOption('TheAnswerToTheUltimateQuestionOfLifeTheUniverseAndEverything'))
+        end)
+    end)
+
+    describe("isBlank", function ()
+        it ('returns true when type is void', function ()
+            assert.is_false(gridModule:isBlank())
+
+            local slot = Slot:new{id = Slot.makeId({type = t.VOID})}
+            local voidModule = GridModule:new{slot = slot}
+
+            assert.is_true(voidModule:isBlank())
         end)
     end)
 

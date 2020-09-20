@@ -131,6 +131,15 @@ describe("slot", function ()
         end)
     end)
 
+    describe('grid module at negative position', function ()
+        it ('has negative x position', function ()
+            local slotId = natbomb.implode({6, 6, 14}, {t.TRAM_UP, -3 +  32, 1 + 32, 250})
+            local slot = Slot:new{id = slotId}
+
+            assert.are.equal(-250, slot.xPos)
+        end)
+    end)
+
     describe('moduleType', function ()
         it('returns tram', function ()
             local slotId = Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0, yPos = 0})

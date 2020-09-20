@@ -1,4 +1,5 @@
 local optional = require('modutram.helper.optional')
+local t = require('modutram.types')
 
 local GridModuleBase = {}
 
@@ -66,6 +67,14 @@ function GridModuleBase:setOptions(options)
     for key, value in pairs(options) do
         self:setOption(key, value)
     end
+end
+
+function GridModuleBase:isBlank()
+    return self:getType() == t.VOID
+end
+
+function GridModuleBase:getXPosInCm()
+    return self.slot.xPos
 end
 
 return GridModuleBase

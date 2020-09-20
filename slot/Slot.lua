@@ -13,6 +13,14 @@ local function toSignedId(unsigned_id)
     return 0
 end
 
+local function toSignedXPos(xPos, gridX)
+    if xPos == 0 or gridX >= 0 then
+        return xPos
+    end
+
+    return -xPos
+end
+
 function Slot:new (o)
     if not (o and o.id) then
         error("Required Property Id is missing")
@@ -28,7 +36,7 @@ function Slot:new (o)
         o.gridX = toSignedId(ids[2])
         o.gridY = toSignedId(ids[3])
 
-        o.xPos = ids[4]
+        o.xPos = toSignedXPos(ids[4], o.gridX)
     else
         local ids = NatBomb.explode(ASSET_MODULE_DIGIT_SPACES, o.id or 0)
 
