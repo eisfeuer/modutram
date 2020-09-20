@@ -127,7 +127,7 @@ describe("slot", function ()
         end)
 
         it('has y position', function ()
-            assert.are.equal(250, slot.yPos)
+            assert.are.equal(250, slot.xPos)
         end)
     end)
 

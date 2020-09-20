@@ -28,7 +28,7 @@ function Slot:new (o)
         o.gridX = toSignedId(ids[2])
         o.gridY = toSignedId(ids[3])
 
-        o.yPos = ids[4]
+        o.xPos = ids[4]
     else
         local ids = NatBomb.explode(ASSET_MODULE_DIGIT_SPACES, o.id or 0)
 
