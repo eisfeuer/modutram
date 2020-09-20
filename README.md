@@ -86,6 +86,8 @@ function data()
     return {
         updateFn = function (params, paramsFromModLua)
             local config = {
+                gridModuleLength = 18, -- length (size on y axis) of a module
+                baseHeight = 0, -- offset of the ground level compared to the ground level of the game
                 -- @todo put config example here
             }
 

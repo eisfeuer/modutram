@@ -1,7 +1,12 @@
+local Config = require('modutram.Config')
+
 local Station = {}
 
 function Station:new(o)
     o = o or {}
+
+    o.config = Config:new(o.config)
+
     setmetatable(o, self)
     self.__index = self
     return o
