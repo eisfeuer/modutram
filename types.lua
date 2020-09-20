@@ -16,5 +16,14 @@ return {
 
     ASSET = 40,
 
-    DECORATION = 48
+    DECORATION = 48,
+
+    TYPE_VOID = 0,
+    TYPE_TRAM = 1,
+    TYPE_BUS = 2,
+    TYPE_TRAIN = 3,
+    TYPE_PLATFORM = 4,
+    TYPE_ASSET = 5,
+    TYPE_DECORATION = 6
+
 }

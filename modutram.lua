@@ -1,4 +1,4 @@
-local Station = require('modutram.station')
+local Station = require('modutram.Station')
 
 local Modutram = {}
 
