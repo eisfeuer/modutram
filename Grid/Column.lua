@@ -1,3 +1,4 @@
+-- @module modutram.grid.Column
 local Column = {}
 
 function Column:new(o)

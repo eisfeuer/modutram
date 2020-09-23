@@ -21,29 +21,38 @@ Asset and decoration modules may have a postfix when you want to specify special
 For example you can define a type `modutram_asset_bench` if you have a specific slot for benches.
 
 ### List of slot types
-| Module Type  | Slot type          | constant             | id | description                                        |
-|:------------:|:------------------:|:--------------------:|:--:|:-------------------------------------------------- |
-| Grid Module  | tram_bidirectional | t.TRAM_BIDIRECTIONAL | 8  | Tram Tracks in both directions                     |
-| Grid Module  | tram_up            | t.TRAM_UP            | 9  | One way tram track up                              |
-| Grid Module  | tram_down          | t.TRAM_DOWN          | 10 | One way tram track down                            |
-| Grid Module  | bus_bidirectional  | t.BUS_BIDIRECTIONAL  | 16 | Bus Tracks in both directions                      |
-| Grid Module  | bus_up             | t.BUS_UP             | 17 | One way bus track up                               |
-| Grid Module  | bus_down           | t.BUS_DOWN           | 18 | One way bus track down                             |
-| Grid Module  | train              | t.TRAIN              | 24 | Train track                                        |
-| Grid Module  | platform_none      | t.PLATFORM_NONE      | 32 | Platform without waiting lanes (passengerEdge)     |
-| Grid Module  | platform_island    | t.PLATFORM_ISLAND    | 33 | Platform with stop at both sides                   |
-| Grid Module  | platform_left      | t.PLATFORM_LEFT      | 34 | Platform with stop at the left side                |
-| Grid Module  | platform_right     | t.PLATFORM_RIGHT     | 35 | Platform with stop at the right side               |
-| Asset Module | asset              | t.ASSET              | 40 | Asset Module                                       |
-| Asset Module | decoration         | t.DECORATION         | 48 | Decoration Module ("Asset" placed on asset module) |
+| Module Type  | Slot type                | constant                   | id | description                                         |
+|:------------:|:------------------------:|:--------------------------:|:--:|:--------------------------------------------------- |
+| Grid Module  | tram_bidirectional_left  | t.TRAM_BIDIRECTIONAL_LEFT  | 8  | Tram Tracks in both directions (left hand traffic)  |
+| Grid Module  | tram_bidirectional_right | t.TRAM_BIDIRECTIONAL_RIGHT | 9  | Tram Tracks in both directions (right hand traffic) |
+| Grid Module  | tram_up                  | t.TRAM_UP                  | 10 | One way tram track up                               |
+| Grid Module  | tram_down                | t.TRAM_DOWN                | 11 | One way tram track down                             |
+| Grid Module  | bus_bidirectional_left   | t.BUS_BIDIRECTIONAL_LEFT   | 16 | Bus Tracks in both directions (left hand traffic)   |
+| Grid Module  | bus_bidirectional_right  | t.BUS_BIDIRECTIONAL_LEFT   | 16 | Bus Tracks in both directions (left hand traffic)   |
+| Grid Module  | bus_up                   | t.BUS_UP                   | 18 | One way bus track up                                |
+| Grid Module  | bus_down                 | t.BUS_DOWN                 | 19 | One way bus track down                              |
+| Grid Module  | train                    | t.TRAIN                    | 24 | Train track                                         |
+| Grid Module  | platform_none            | t.PLATFORM_NONE            | 32 | Platform without waiting lanes (passengerEdge)      |
+| Grid Module  | platform_island          | t.PLATFORM_ISLAND          | 33 | Platform with stop at both sides                    |
+| Grid Module  | platform_left            | t.PLATFORM_LEFT            | 34 | Platform with stop at the left side                 |
+| Grid Module  | platform_right           | t.PLATFORM_RIGHT           | 35 | Platform with stop at the right side                |
+| Asset Module | asset                    | t.ASSET                    | 40 | Asset Module                                        |
+| Asset Module | decoration               | t.DECORATION               | 48 | Decoration Module ("Asset" placed on asset module)  |
 
 ### Access to modutram
 You have access to modutram from your module by calling
 ```lua
-params.modutram
+result.modutram
 ```
 in your module updateFn().
 
+### Access to current module
+You have access to the current module in your module file by calling the `getModule()` with the given `slotId` as param
+```lua
+updateFn = function(result, transform, tag, slotId)
+    local module = result.modutram:getModule(slotId)
+end
+```
 
 ## Build own tram station
 

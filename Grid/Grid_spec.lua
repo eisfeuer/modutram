@@ -1,9 +1,9 @@
 local GridModule = require("modutram.grid_module.Base")
 local Slot = require("modutram.slot.Slot")
 local t = require("modutram.types")
-local Grid = require("modutram.Grid.Grid")
-local Config = require("modutram.Config.Config")
-local defaultConfig = require("modutram.Config.defaults")
+local Grid = require("modutram.grid.Grid")
+local Config = require("modutram.config.Config")
+local defaultConfig = require("modutram.config.defaults")
 
 describe("Grid", function ()   
     describe("new", function ()
