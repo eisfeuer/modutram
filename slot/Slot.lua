@@ -1,8 +1,8 @@
 local t = require('modutram.types')
 local NatBomb = require('modutram.slot.natbomb')
 
-local GRID_MODULE_DIGIT_SPACES = {6, 6, 14}
-local ASSET_MODULE_DIGIT_SPACES = {6, 6, 8, 6}
+local GRID_MODULE_DIGIT_SPACES = {6, 6, 13}
+local ASSET_MODULE_DIGIT_SPACES = {6, 6, 8, 5}
 
 local Slot = {}
 
@@ -26,7 +26,7 @@ function Slot:new (o)
         error("Required Property Id is missing")
     end
 
-    local slotType = NatBomb.explode({26}, o.id)[1]
+    local slotType = NatBomb.explode({25}, o.id)[1]
 
     if Slot.isGridModuleType(slotType) then
         local ids = NatBomb.explode(GRID_MODULE_DIGIT_SPACES, o.id)

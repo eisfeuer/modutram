@@ -14,7 +14,7 @@ describe("slot", function ()
                 xPos = 250,
             })
 
-            assert.are.equal(natbomb.implode({6, 6, 14}, {t.TRAM_UP, 3 +  32, 1 + 32, 250}), id)
+            assert.are.equal(natbomb.implode({6, 6, 13}, {t.TRAM_UP, 3 +  32, 1 + 32, 250}), id)
         end)
 
         it('generates module id of a grid module with negative xPos', function ()
@@ -25,7 +25,7 @@ describe("slot", function ()
                 xPos = -250,
             })
 
-            assert.are.equal(natbomb.implode({6, 6, 14}, {t.TRAM_UP, -3 +  32, 1 + 32, 250}), id)
+            assert.are.equal(natbomb.implode({6, 6, 13}, {t.TRAM_UP, -3 +  32, 1 + 32, 250}), id)
         end)
 
         it('generates module id of an asset module', function ()
@@ -37,12 +37,12 @@ describe("slot", function ()
                 decorationId = 15
             })
 
-            assert.are.equal(natbomb.implode({6, 6, 8, 6}, {t.DECORATION, -3 +  32, 1 + 32, 4, 15}), id)
+            assert.are.equal(natbomb.implode({6, 6, 8, 5}, {t.DECORATION, -3 +  32, 1 + 32, 4, 15}), id)
         end)
     end)
 
     describe('asset module', function ()
-        local slotId = natbomb.implode({6, 6, 8, 6}, {t.DECORATION, 3 +  32, 1 + 32, 2, 3})
+        local slotId = natbomb.implode({6, 6, 8, 5}, {t.DECORATION, 3 +  32, 1 + 32, 2, 3})
         local slot = Slot:new{id = slotId}
 
         it('is not a grid module', function ()
@@ -87,7 +87,7 @@ describe("slot", function ()
     end)
 
     describe('grid module', function ()
-        local slotId = natbomb.implode({6, 6, 14}, {t.TRAM_UP, 3 +  32, 1 + 32, 250})
+        local slotId = natbomb.implode({6, 6, 13}, {t.TRAM_UP, 3 +  32, 1 + 32, 250})
         local slot = Slot:new{id = slotId}
 
         it('is a grid module', function ()
@@ -133,7 +133,7 @@ describe("slot", function ()
 
     describe('grid module at negative position', function ()
         it ('has negative x position', function ()
-            local slotId = natbomb.implode({6, 6, 14}, {t.TRAM_UP, -3 +  32, 1 + 32, 250})
+            local slotId = natbomb.implode({6, 6, 13}, {t.TRAM_UP, -3 +  32, 1 + 32, 250})
             local slot = Slot:new{id = slotId}
 
             assert.are.equal(-250, slot.xPos)
