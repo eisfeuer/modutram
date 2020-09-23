@@ -88,4 +88,30 @@ describe('Station', function ()
             assert.are.equal('TramUp', result.class)
         end)
     end)
+
+    describe('getModuleAt', function ()
+        it ('get modules at given grid position', function ()
+            local station = Station:new{}
+            local slotId = Slot.makeId({type = t.TRAM_UP, gridX = 1, gridY = 2})
+
+            station:registerModule(slotId)
+
+            local result = station:getModuleAt(1,2)
+
+            assert.are.equal(result, station.grid:get(1,2))
+            assert.are.equal('TramUp', result.class)
+        end)
+    end)
+
+    describe('isModuleAt', function ()
+        it ('checks whether there is a module at given grid position', function ()
+            local station = Station:new{}
+            local slotId = Slot.makeId({type = t.TRAM_UP, gridX = 1, gridY = 2})
+
+            station:registerModule(slotId)
+
+            assert.is_true(station:isModuleAt(1,2))
+            assert.is_false(station:isModuleAt(1,3))
+        end)
+    end)
 end)

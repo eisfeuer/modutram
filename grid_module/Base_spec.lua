@@ -1,5 +1,6 @@
 local Slot = require("modutram.slot.Slot")
 local t = require("modutram.types")
+local Station = require("modutram.Station")
 
 local GridModule = require("modutram.grid_module.Base")
 
@@ -107,89 +108,89 @@ describe("GridModule", function()
         end)
     end)
 
-    -- describe('hasNeighborLeft', function ()
-    --     it('checks weather grid element has left neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local leftNeighbor = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = -1, gridY = 0}))
+    describe('hasNeighborLeft', function ()
+        it('checks weather grid element has left neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local leftNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = -1, gridY = 0}))
 
-    --         assert.is_true(testGridElement:hasNeighborLeft())
-    --         assert.is_false(leftNeighbor:hasNeighborLeft())
-    --     end)
-    -- end)
+            assert.is_true(testGridElement:hasNeighborLeft())
+            assert.is_false(leftNeighbor:hasNeighborLeft())
+        end)
+    end)
 
-    -- describe('getNeighborLeft', function ()
-    --     it('returns left neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local leftNeighbor = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = -1, gridY = 0}))
+    describe('getNeighborLeft', function ()
+        it('returns left neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local leftNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = -1, gridY = 0}))
 
-    --         assert.are.equal(leftNeighbor, testGridElement:getNeighborLeft())
-    --     end)
-    -- end)
+            assert.are.equal(leftNeighbor, testGridElement:getNeighborLeft())
+        end)
+    end)
 
-    -- describe('hasNeighborRight', function ()
-    --     it('checks weather grid element has right neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local rightNeighbor = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 1, gridY = 0}))
+    describe('hasNeighborRight', function ()
+        it('checks weather grid element has right neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local rightNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 1, gridY = 0}))
 
-    --         assert.is_true(testGridElement:hasNeighborRight())
-    --         assert.is_false(rightNeighbor:hasNeighborRight())
-    --     end)
-    -- end)
+            assert.is_true(testGridElement:hasNeighborRight())
+            assert.is_false(rightNeighbor:hasNeighborRight())
+        end)
+    end)
 
-    -- describe('getNeighborRight', function ()
-    --     it('returns right neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local rightNeighbor = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 1, gridY = 0}))
+    describe('getNeighborRight', function ()
+        it('returns right neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local rightNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 1, gridY = 0}))
 
-    --         assert.are.equal(rightNeighbor, testGridElement:getNeighborRight())
-    --     end)
-    -- end)
+            assert.are.equal(rightNeighbor, testGridElement:getNeighborRight())
+        end)
+    end)
 
-    -- describe('hasNeighborTop', function ()
-    --     it('checks weather grid element has top neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local neightborTop = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 1}))
+    describe('hasNeighborTop', function ()
+        it('checks weather grid element has top neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local neightborTop = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 1}))
 
-    --         assert.is_true(testGridElement:hasNeighborTop())
-    --         assert.is_false(neightborTop:hasNeighborTop())
-    --     end)
-    -- end)
+            assert.is_true(testGridElement:hasNeighborTop())
+            assert.is_false(neightborTop:hasNeighborTop())
+        end)
+    end)
 
-    -- describe('getNeighborTop', function ()
-    --     it('returns top neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local neighborTop = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 1}))
+    describe('getNeighborTop', function ()
+        it('returns top neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local neighborTop = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 1}))
 
-    --         assert.are.equal(neighborTop, testGridElement:getNeighborTop())
-    --     end)
-    -- end)
+            assert.are.equal(neighborTop, testGridElement:getNeighborTop())
+        end)
+    end)
 
-    -- describe('hasNeighborBottom', function ()
-    --     it('checks weather grid element has bottom neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local neightborBottom = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = -1}))
+    describe('hasNeighborBottom', function ()
+        it('checks weather grid element has bottom neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local neightborBottom = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = -1}))
 
-    --         assert.is_true(testGridElement:hasNeighborBottom())
-    --         assert.is_false(neightborBottom:hasNeighborBottom())
-    --     end)
-    -- end)
+            assert.is_true(testGridElement:hasNeighborBottom())
+            assert.is_false(neightborBottom:hasNeighborBottom())
+        end)
+    end)
 
-    -- describe('getNeighborBottom', function ()
-    --     it('returns bottom neighbor', function ()
-    --         local station = Station:new{}
-    --         local testGridElement = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-    --         local neighborBottom = station:initializeAndRegister(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = -1}))
+    describe('getNeighborBottom', function ()
+        it('returns bottom neighbor', function ()
+            local station = Station:new{}
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
+            local neighborBottom = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = -1}))
 
-    --         assert.are.equal(neighborBottom, testGridElement:getNeighborBottom())
-    --     end)
-    -- end)
+            assert.are.equal(neighborBottom, testGridElement:getNeighborBottom())
+        end)
+    end)
 
     describe('setOptions', function ()
         it('set options', function ()

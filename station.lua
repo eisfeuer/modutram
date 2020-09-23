@@ -49,4 +49,12 @@ function Station:getModule(slotId)
     return self.grid:get(slot.gridX, slot.gridY)
 end
 
+function Station:getModuleAt(gridX, gridY)
+    return self.grid:get(gridX, gridY)
+end
+
+function Station:isModuleAt(gridX, gridY)
+    return self.grid:has(gridX, gridY)
+end
+
 return Station

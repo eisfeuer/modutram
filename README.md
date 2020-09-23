@@ -42,17 +42,61 @@ For example you can define a type `modutram_asset_bench` if you have a specific 
 ### Access to modutram
 You have access to modutram from your module by calling
 ```lua
-result.modutram
+updateFn = function(result, transform, tag, slotId)
+    local modutram = result.modutram
+end
 ```
 in your module updateFn().
 
-### Access to current module
+### Access to modules
+
+#### Access to current module
 You have access to the current module in your module file by calling the `getModule()` with the given `slotId` as param
 ```lua
 updateFn = function(result, transform, tag, slotId)
     local module = result.modutram:getModule(slotId)
 end
 ```
+
+#### Access to neighbor modules
+You will get access to the neighbor modules by using following methods
+```
+updateFn = function(result, transform, tag, slotId)
+    local module = result.modutram:getModule(slotId)
+
+    local leftNeightbor = module:getNeighborLeft() -- left from current module
+    local rightNeighbor = module:getNeighborRight() -- right from current module
+    local neighborTop = module:getNeighborTop() -- above current module
+    local neighborBottom = module:getNeighborBottom() -- below current module
+
+    -- checking whether there is a neighbor
+    module:hasNeighborLeft() -- false in this case
+    module:hasNeighborRight() -- false in this case
+    module:hasNeighborTop() -- false in this case
+    module:hasNeighborBottom() -- false in this case
+end
+```
+
+#### Access to any module
+You will get access to any module by grid coordinates
+
+```
+-- getting the module which is three steps left from current module
+updateFn = function(result, transform, tag, slotId)
+    local module = result.modutram:getModule(slotId)
+
+    local otherModule = result.modutram:getModuleAt(module:getGridX() - 3, module:getGridY())
+
+    -- checking for a module at grid coordinate
+    result.modutram:isModuleAt(module:getGridX() - 3, module:getGridY()) -- false in this case
+end
+```
+
+#### Get module from coorinate with no existing module
+If you will access to a module which not exists via neighbor function or `getModuleAt()` you will get a void module which is like a dummy.
+You can use the neighbor function like a normal module
+
+To check whether there is a void module you can call `module:isBlank()`
 
 ## Build own tram station
 

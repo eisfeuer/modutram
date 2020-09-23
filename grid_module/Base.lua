@@ -1,6 +1,7 @@
 local optional = require('modutram.helper.optional')
 local t = require('modutram.types')
 
+-- @module modutram.grid_module.Base
 local GridModuleBase = {}
 
 function GridModuleBase:new(o)
@@ -76,6 +77,42 @@ end
 
 function GridModuleBase:getXPosInCm()
     return self.slot.xPos
+end
+
+function GridModuleBase:getGrid()
+    return self.grid
+end
+
+function GridModuleBase:hasNeighborLeft()
+    return self:getGrid():has(self:getGridX() - 1, self:getGridY())
+end
+
+function GridModuleBase:getNeighborLeft()
+    return self:getGrid():get(self:getGridX() - 1, self:getGridY())
+end
+
+function GridModuleBase:hasNeighborRight()
+    return self:getGrid():has(self:getGridX() + 1, self:getGridY())
+end
+
+function GridModuleBase:getNeighborRight()
+    return self:getGrid():get(self:getGridX() + 1, self:getGridY())
+end
+
+function GridModuleBase:hasNeighborTop()
+    return self:getGrid():has(self:getGridX(), self:getGridY() + 1)
+end
+
+function GridModuleBase:getNeighborTop()
+    return self:getGrid():get(self:getGridX(), self:getGridY() + 1)
+end
+
+function GridModuleBase:hasNeighborBottom()
+    return self:getGrid():has(self:getGridX(), self:getGridY() - 1)
+end
+
+function GridModuleBase:getNeighborBottom()
+    return self:getGrid():get(self:getGridX(), self:getGridY() - 1)
 end
 
 return GridModuleBase
