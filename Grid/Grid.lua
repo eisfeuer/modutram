@@ -1,6 +1,6 @@
 local Column = require('modutram.Grid.Column')
 local Slot = require('modutram.slot.Slot')
-local GridModule = require('modutram.GridModule.Base')
+local GridModule = require('modutram.grid_module.Base')
 local t = require('modutram.types')
 
 local Grid = {}

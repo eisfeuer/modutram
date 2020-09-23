@@ -10,6 +10,7 @@ function GridModuleBase:new(o)
         error('Grid Module MUST have a slot attribute')
     end
 
+    o.class = 'Base'
     o.config = o.config or {}
     o.options = o.options or {}
 

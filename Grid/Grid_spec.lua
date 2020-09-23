@@ -1,4 +1,4 @@
-local GridModule = require("modutram.GridModule.Base")
+local GridModule = require("modutram.grid_module.Base")
 local Slot = require("modutram.slot.Slot")
 local t = require("modutram.types")
 local Grid = require("modutram.Grid.Grid")

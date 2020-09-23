@@ -148,7 +148,7 @@ describe("slot", function ()
             assert.are.equal(t.TYPE_TRAM, slot.moduleType)
         end)
         it('returns bus', function ()
-            local slotId = Slot.makeId({type = t.BUS_BIDIRECTIONAL, gridX = 0, gridY = 0, yPos = 0})
+            local slotId = Slot.makeId({type = t.BUS_BIDIRECTIONAL_RIGHT, gridX = 0, gridY = 0, yPos = 0})
             local slot = Slot:new{id = slotId}
 
             assert.are.equal(t.TYPE_BUS, slot.moduleType)

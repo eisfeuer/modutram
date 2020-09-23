@@ -1,7 +1,7 @@
 local Slot = require("modutram.slot.Slot")
 local t = require("modutram.types")
 
-local GridModule = require("modutram.GridModule.Base")
+local GridModule = require("modutram.grid_module.Base")
 
 describe("GridModule", function()
     local slotId = Slot.makeId({
