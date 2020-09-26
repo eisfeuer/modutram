@@ -1,8 +1,25 @@
+local except = require("modutram.helper.except")
 local optional = require('modutram.helper.optional')
 local t = require('modutram.types')
 
 -- @module modutram.grid_module.Base
 local GridModuleBase = {}
+
+local gridTypes = {
+    t.TRAM_BIDIRECTIONAL_LEFT,
+    t.TRAM_BIDIRECTIONAL_RIGHT,
+    t.TRAM_UP,
+    t.TRAM_DOWN,
+    t.BUS_BIDIRECTIONAL_LEFT,
+    t.BUS_BIDIRECTIONAL_RIGHT,
+    t.BUS_UP,
+    t.BUS_DOWN,
+    t.TRAIN,
+    t.PLATFORM_NONE,
+    t.PLATFORM_ISLAND,
+    t.PLATFORM_LEFT,
+    t.PLATFORM_RIGHT,
+}
 
 function GridModuleBase:new(o)
     o = o or {}
@@ -14,6 +31,8 @@ function GridModuleBase:new(o)
     o.class = 'Base'
     o.config = o.config or {}
     o.options = o.options or {}
+    o.possibleLeftNeighbors = gridTypes
+    o.possibleRightNeighbors = gridTypes
 
     setmetatable(o, self)
     self.__index = self

@@ -2,6 +2,9 @@ local Config = require('modutram.config.Config')
 local Slot = require('modutram.slot.Slot')
 local Grid = require('modutram.grid.Grid')
 local GridModuleFactory = require('modutram.grid_module.factory')
+local GridSlotBuilder = require('modutram.slot.GridSlotBuilder')
+local SlotConfigRepository = require('modutram.slot.SlotConfigRepository')
+local optional = require('modutram.helper.optional')
 
 -- @module modutram.station
 local Station = {}
@@ -18,8 +21,12 @@ function Station:new(o)
 end
 
 function Station:bindToResult(result)
+    local gridSlotBuilder = GridSlotBuilder:new{grid = self.grid, config = self.config}
+    local slotConfigRepository = SlotConfigRepository.makeWithParams(optional(self.paramsFromModLua).modules or {})
+
     result.modutram = self
     result.models = result.models or {}
+    result.slots = gridSlotBuilder:placeGridSlots(slotConfigRepository)
 
     if #result.models == 0 then
         table.insert(result.models, {

@@ -43,4 +43,26 @@ function SlotConfigRepository:get(moduleType, moduleWidth)
     return result and {result}
 end
 
+function SlotConfigRepository:getAll()
+    local result = {}
+
+    for _,  typeRepo in pairs(self.repository) do
+        for _, typeAndWidthRepo in pairs(typeRepo) do
+            table.insert(result, typeAndWidthRepo)
+        end
+    end
+
+    return result
+end
+
+function SlotConfigRepository.makeWithParams(paramsFromModLua)
+    local slotConfigRepository = SlotConfigRepository:new{}
+
+    for _, slotConfig in pairs(paramsFromModLua) do
+        slotConfigRepository:add(slotConfig)
+    end
+
+    return slotConfigRepository
+end
+
 return SlotConfigRepository

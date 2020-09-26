@@ -215,4 +215,34 @@ describe("Grid", function ()
         end)
     end)
 
+    describe("eachColumn", function ()
+        it("execute a function for each column", function ()
+            local grid = Grid:new{config = Config:new{}}
+
+            local gridModule = GridModule:new{slot = Slot:new{id = Slot.makeId({
+                type = t.TRACK,
+                gridX = 1,
+                gridY = 2
+            })}, grid = grid}
+
+            grid:set(gridModule)
+
+            gridModule = GridModule:new{slot = Slot:new{id = Slot.makeId({
+                type = t.TRACK,
+                gridX = -1,
+                gridY = -2
+            })}, grid = grid}
+
+            grid:set(gridModule)
+
+            local result = {}
+
+            grid:eachColumn(function (column)
+                table.insert(result, column.gridX)
+            end)
+
+            assert.are.same({-1, 1}, result)
+        end)
+    end)
+
 end)
