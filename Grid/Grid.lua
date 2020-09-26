@@ -38,6 +38,10 @@ function Grid:getColumn(gridX)
     return self.columns[gridX]
 end
 
+function Grid:hasColumn(gridX)
+    return self:getColumn(gridX) ~= nil
+end
+
 function Grid:updateBounds(gridX, gridY)
     self.bounds.left = math.min(self.bounds.left, gridX)
     self.bounds.right = math.max(self.bounds.right, gridX)

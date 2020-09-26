@@ -104,12 +104,12 @@ function SlotFactory:makeSlotAtGridModule(slotConfigRepository, gridModule, vert
     )
 end
 
-function SlotFactory:makeSlotAboveGridModule(slotConfigRepository, gridModule)
-    return self:makeSlotAtGridModule(slotConfigRepository, gridModule, 1)
+function SlotFactory:makeSlotsAboveGridModule(slotConfigRepository, gridModule)
+    return { self:makeSlotAtGridModule(slotConfigRepository, gridModule, 1) }
 end
 
-function SlotFactory:makeSlotBelowGridModule(slotConfigRepository, gridModule)
-    return self:makeSlotAtGridModule(slotConfigRepository, gridModule, -1)
+function SlotFactory:makeSlotsBelowGridModule(slotConfigRepository, gridModule)
+    return { self:makeSlotAtGridModule(slotConfigRepository, gridModule, -1) }
 end
 
 return SlotFactory

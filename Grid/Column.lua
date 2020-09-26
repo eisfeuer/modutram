@@ -42,4 +42,12 @@ function Column:hasGridModule(gridY)
     return self:getGridModule(gridY) ~= nil
 end
 
+function Column:eachGridModule(callable)
+    for i = self.bottomGridY, self.topGridY do
+        if self.gridModules[i] then
+            callable(self.gridModules[i])
+        end
+    end
+end
+
 return Column

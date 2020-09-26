@@ -116,4 +116,37 @@ describe('Column', function ()
             assert.is_nil(nil, column:getGridModule(4))
         end)
     end)
+
+    describe('eachGridModule', function ()
+        it ("execute a function for every module", function ()
+            local gridModule1 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = 1
+            })})}
+            local gridModule2 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = 0
+            })})}
+            local gridModule3 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = -2
+            })})}
+
+            local column = Column:new{initialModule = gridModule1}
+
+            column:addGridModule(gridModule2)
+            column:addGridModule(gridModule3)
+
+            local result = {}
+
+            column:eachGridModule(function (gridModule)
+                table.insert(result, gridModule:getGridY())
+            end)
+
+            assert.are.same({-2, 0, 1}, result)
+        end)
+    end)
 end)

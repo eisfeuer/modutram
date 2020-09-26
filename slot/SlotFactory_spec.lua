@@ -101,7 +101,7 @@ describe("SlotFactory", function ()
             assert.are.same(expected, slotFactory:makeSlotsLeftFromGridModule(slotConfigRepo, gridModule))
         end)
     end)
-
+    
     describe("makeSlotsFromGridModule", function ()
         it ("makes any slot right from grid module", function ()
             local slotConfigs = {{
@@ -145,7 +145,7 @@ describe("SlotFactory", function ()
         end)
     end)
 
-    describe("makeSlotAboveGridModule", function ()
+    describe("makeSlotsAboveGridModule", function ()
         it ("makes a slot avove given grid module", function ()
             local slotConfigs = {{
                 type = t.TRAM_UP,
@@ -178,11 +178,11 @@ describe("SlotFactory", function ()
 
             local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
 
-            assert.are.same(slotFactory:make(slotConfigs[2], 2, 4, 350), slotFactory:makeSlotAboveGridModule(slotConfigRepo, gridModule))
+            assert.are.same({slotFactory:make(slotConfigs[2], 2, 4, 350)}, slotFactory:makeSlotsAboveGridModule(slotConfigRepo, gridModule))
         end)
     end)
 
-    describe("makeSlotBelowGridModule", function ()
+    describe("makeSlotsBelowGridModule", function ()
         it ("makes a slot avove given grid module", function ()
             local slotConfigs = {{
                 type = t.TRAM_UP,
@@ -215,7 +215,7 @@ describe("SlotFactory", function ()
 
             local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
 
-            assert.are.same(slotFactory:make(slotConfigs[2], 2, 2, 350), slotFactory:makeSlotBelowGridModule(slotConfigRepo, gridModule))
+            assert.are.same({slotFactory:make(slotConfigs[2], 2, 2, 350)}, slotFactory:makeSlotsBelowGridModule(slotConfigRepo, gridModule))
         end)
     end)
 
