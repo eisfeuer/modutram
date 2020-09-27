@@ -98,6 +98,39 @@ You can use the neighbor function like a normal module
 
 To check whether there is a void module you can call `module:isBlank()`
 
+### Utils
+
+Utils are tiny various functions which make module building easier.
+
+#### makeGroundFaceFromGridModule
+`local makeGroundFaceFromGridModule = require("modutram.utils.makeGroundFaceFromGridModule")`
+
+Makes a ground face (necessary for groundFaces and terrainAlignment). The size of the ground face is the size of grid module.
+Params:
+  `gridModule`: Module which position and sizes are should be used for
+  `transform`: Module pivot point transformation
+Return: the ground face (as table)
+
+```
+local module = result.modutram:getModule(slotId)
+local groundFace = makeGroundFaceFromGridModule(module, transform)
+```
+
+#### makeLot
+`local makeLot = require("modutram.utils.makeLot")`
+
+Makes ground faces and terraign alignment and adds it to the result table
+Params:
+  `result`: Result table to add
+  `groundFace`: Ground face to create the lot
+  `fillTexture`(optional): Ground Texture for the plain
+  `strokeTexture`(optional): Ground Texture for the stroke
+
+```
+local module = result.modutram:getModule(slotId)
+local groundFace = makeGroundFaceFromGridModule(module, transform)
+makeLot(result, groundFace, "shared/asphalt_01.gtex.lua", "street_border.lua")
+```
 ## Build own tram station
 
 If your modules doesn't to the standard station, you can define a station with our own namespace and change the properties that you need to.

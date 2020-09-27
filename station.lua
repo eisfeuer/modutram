@@ -27,6 +27,8 @@ function Station:bindToResult(result)
     result.modutram = self
     result.models = result.models or {}
     result.slots = gridSlotBuilder:placeGridSlots(slotConfigRepository)
+    result.terrainAlignmentLists = result.terrainAlignmentLists or {}
+    result.groundFaces = result.groundFaces or {}
 
     if #result.models == 0 then
         table.insert(result.models, {
