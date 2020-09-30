@@ -154,4 +154,14 @@ function GridModuleBase:getNeighborBottom()
     return self:getGrid():get(self:getGridX(), self:getGridY() - 1)
 end
 
+function GridModuleBase:handleTerminals(terminalHandleFunc)
+    self.terminalHandleFunc = terminalHandleFunc
+end
+
+function GridModuleBase:callTerminalHandleFunc(terminalGroup)
+    if self.terminalHandleFunc then
+        self.terminalHandleFunc(terminalGroup)
+    end
+end
+
 return GridModuleBase

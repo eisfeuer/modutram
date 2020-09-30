@@ -210,4 +210,21 @@ describe("GridModule", function()
             assert.are.equal('val2', testGridModule:getOption('opt2'))
         end)
     end)
+
+    describe('handleTerminals / callTerminalHandleFunc', function ()
+        it('handles terminals', function ()
+            local slot = Slot:new{id = Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0})}
+            local testGridModule = GridModule:new{slot = slot}
+
+            local called = false
+
+            testGridModule:handleTerminals(function ()
+                called = true
+            end)
+
+            testGridModule:callTerminalHandleFunc()
+
+            assert.is_true(called)
+        end)
+    end)
 end)
