@@ -1,10 +1,14 @@
 local BusClass = {}
 
 function BusClass.new(GridModule)
-    local bus = GridModule
-    bus.class = 'Bus'
+    local Bus = GridModule
+    Bus.class = 'Bus'
 
-    return bus
+    function Bus:isBus()
+        return true
+    end
+
+    return Bus
 end
 
 return BusClass

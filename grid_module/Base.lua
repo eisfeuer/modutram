@@ -94,6 +94,26 @@ function GridModuleBase:isBlank()
     return self:getType() == t.VOID
 end
 
+function GridModuleBase:isPlatform()
+    return false
+end
+
+function GridModuleBase:isTram()
+    return false
+end
+
+function GridModuleBase:isBus()
+    return false
+end
+
+function GridModuleBase:isTrain()
+    return false
+end
+
+function GridModuleBase:isRail()
+    return self:isTram() or self:isTrain()
+end
+
 function GridModuleBase:getXPosInCm()
     return self.slot.xPos
 end

@@ -15,6 +15,10 @@ function PlatformClass:new(GridModule)
         {t.PLATFORM_ISLAND, t.PLATFORM_LEFT, t.PLATFORM_RIGHT}
     )
 
+    function Platform:isPlatform()
+        return true
+    end
+
     return Platform
 end
 
