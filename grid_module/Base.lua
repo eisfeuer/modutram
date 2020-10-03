@@ -98,6 +98,10 @@ function GridModuleBase:isPlatform()
     return false
 end
 
+function GridModuleBase:isTrack()
+    return false
+end
+
 function GridModuleBase:isTram()
     return false
 end

@@ -31,6 +31,13 @@ function TerminalGroup:addVehicleAndPassengerTerminalModel(modelId, modelTransfo
 end
 
 function TerminalGroup:addModelAndGetPosition(modelId, modelTransformation)
+    if not modelId then
+        error("the first parameter MUST be a model id (e.g. station/tram/terminal.mdl)")
+    end
+    if not modelTransformation then
+        error("the second parameter MUST be a transformation matrix")
+    end
+
     local modelPosition = #self.result.models
 
     table.insert(self.result.models, {

@@ -8,6 +8,10 @@ function TramClass:new(GridModule)
         return true
     end
 
+    function Tram:isTrack()
+        return true
+    end
+
     return Tram
 end
 

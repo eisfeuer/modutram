@@ -8,6 +8,10 @@ function BusClass.new(GridModule)
         return true
     end
 
+    function Bus:isTrack()
+        return true
+    end
+
     return Bus
 end
 

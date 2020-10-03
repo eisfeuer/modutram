@@ -149,4 +149,40 @@ describe('Column', function ()
             assert.are.same({-2, 0, 1}, result)
         end)
     end)
+
+    describe('eachWithEmpty', function ()
+        local gridModule1 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+            type = t.PLATFORM_LEFT,
+            gridX = 3,
+            gridY = 1
+        })})}
+        local gridModule2 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+            type = t.PLATFORM_LEFT,
+            gridX = 3,
+            gridY = 0
+        })})}
+        local gridModule3 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+            type = t.PLATFORM_LEFT,
+            gridX = 3,
+            gridY = -2
+        })})}
+
+        local column = Column:new{initialModule = gridModule1}
+
+        column:addGridModule(gridModule2)
+        column:addGridModule(gridModule3)
+
+        local result = {}
+
+        column:eachWithEmpty(function (gridModule)
+            if gridModule then
+                table.insert(result, gridModule:getGridY())
+                return
+            end
+
+            table.insert(result, 'nil')
+        end)
+
+        assert.are.same({-2, 'nil', 0, 1}, result)
+    end)
 end)

@@ -50,4 +50,10 @@ function Column:eachGridModule(callable)
     end
 end
 
+function Column:eachWithEmpty(callable)
+    for i = self.bottomGridY, self.topGridY do
+        callable(self.gridModules[i])
+    end
+end
+
 return Column

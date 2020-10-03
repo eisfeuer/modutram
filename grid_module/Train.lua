@@ -8,6 +8,10 @@ function TrainClass:new(GridModule)
         return true
     end
 
+    function Train:isTrack()
+        return true
+    end
+
     return Train
 end
 
