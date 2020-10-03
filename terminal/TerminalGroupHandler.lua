@@ -16,7 +16,7 @@ function TerminalGroupHandler:handle(gridModule)
     end
 
     local neighbor = self.grid:get(self.neighborGridX, gridModule:getGridY())
-    if not neighbor:isTrack() then
+    if not (neighbor:isTrack() and neighbor:getOption('hasTerminals', true)) then
         self:finalizeTerminalGroup()
         return
     end
@@ -35,6 +35,10 @@ end
 
 function TerminalGroupHandler:gridModuleIsValidPlatform(gridModule)
     if not gridModule then
+        return false
+    end
+
+    if not gridModule:getOption('hasTerminals', true) then
         return false
     end
 
@@ -70,14 +74,16 @@ function TerminalGroupHandler:finalizeTerminalGroup()
     end
 
     local centerTrackModule = self.grid:get(self.neighborGridX, self:getCenter(self.startPos, self.endPos))
-    if not centerTrackModule:isTrack() then
+    if not (centerTrackModule:isTrack() and centerTrackModule:getOption('hasTerminals', true)) then
         self:reset()
         return
     end
 
     self.terminalGroup.vehicleStopAlignment = self:getAlignment(self.startPos, self.endPos)
     centerTrackModule:callTerminalHandleFunc(self.terminalGroup)
-    self.terminalGroup:addToResult()
+    if self.terminalGroup:isValid() then
+        self.terminalGroup:addToResult()
+    end
     self:reset()
 end
 

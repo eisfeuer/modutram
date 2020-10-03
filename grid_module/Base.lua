@@ -28,6 +28,7 @@ function GridModuleBase:new(o)
         error('Grid Module MUST have a slot attribute')
     end
 
+    o.hasTerminals = false
     o.class = 'Base'
     o.config = o.config or {}
     o.options = o.options or {}
@@ -77,7 +78,15 @@ function GridModuleBase:getAbsoluteZ()
 end
 
 function GridModuleBase:getOption(key, default)
-    return self.options[key] or optional(self.slot:getOptions())[key] or default
+    if self.options[key] == nil then
+        if optional(self.slot:getOptions())[key] == nil then
+            return default
+        end
+
+        return self.slot:getOptions()[key]
+    end
+    
+    return self.options[key]
 end
 
 function GridModuleBase:setOption(key, value)
@@ -163,8 +172,19 @@ function GridModuleBase:handleTerminals(terminalHandleFunc)
 end
 
 function GridModuleBase:callTerminalHandleFunc(terminalGroup)
+    self.hasTerminals = true
     if self.terminalHandleFunc then
         self.terminalHandleFunc(terminalGroup)
+    end
+end
+
+function GridModuleBase:handleLanes(laneHandleFunc)
+    self.laneHandleFunc = laneHandleFunc
+end
+
+function GridModuleBase:callLaneHandleFunc()
+    if self.laneHandleFunc then
+        self.laneHandleFunc()
     end
 end
 

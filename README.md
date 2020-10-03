@@ -98,6 +98,78 @@ You can use the neighbor function like a normal module
 
 To check whether there is a void module you can call `module:isBlank()`
 
+### Lanes and Terminals
+
+Lanes are models with pathes for road vehicles (including tram), passengers and cargo. How lane models structured and works you can see in the [official transport fever 2 modding documentation](https://www.transportfever2.com/wiki/doku.php?id=modding:resourcetypes:mdl#transport_network_provider).
+I recommmend to separate lane models from "real" models because lanes are place conditionalle how modules are placed.
+
+Terminals are lane models which has a vehicle node (node where a vehicle stops), passenger edge (edge where passenger waits), passenger node (node where the passengers exits a vehicle) or combined.
+
+Modutram offers two function to handle lanes and terminals
+
+#### handleTerminals
+
+The `handleTerminals()` function will be called when you module is part of a terminal group. A terminal group include the module where a vehicle stops and all modules where passengers leaves the vehicle or are waiting for it.
+The `handleTerminals()` function has one parameter `terminalGroup`. Terminal Models MUST to be added via the `terminalGroup` model. Otherwise there won't be bind each other to a valid terminal group. 
+
+##### Properties
+
+The `terminalGroup` has three properties:
+- trackDirection ('left' or 'right'): relevant for platforms - Direction of the current handled tracks - the `handleTerminals()` my be called twice for each trackDirection on islandPlatforms.
+- platformDirection ('left' or 'right'): relevant for tracks -  Direction of the current handled platform - the `handleTerminals()` my be called twice for each track on bidirectional track modules.
+- vehicleStopAlignment ('top' or 'middle'): relevant for tracks - Position of the stop node relative to the track module to create a stop node at the center of the whole terminal group.
+
+##### adding passenger and cargo terminals
+
+To add a passenger or a cargo terminal you have to call `terminalGroup:addTerminalModel(modelId, modelTransformation, modelTerminalId)` on a platform module
+params:
+  modelId: Id (filename of the mdl file) of the terminal model
+  transformation: tranformation matrix (pivot center of the station) of the terminal model
+  modelTerminalId (optional, default = 0): Id of the terminal defined in the terminal model
+
+Example
+```
+module:handleTerminals(function (terminalGroup)
+    terminalGroup:addTerminalModel('station/tram/modular_tram_station/path/passenger_terminal.mdl', transform)
+end)
+```
+
+##### adding vehicle terminals
+
+To add a vehicle terminal you have to call `terminalGroup:addVehicleTerminalModel(modelId, modelTransformation, modelTerminalId)` on a track module.
+The pareters are the same as passenger/cargo modules
+
+Example:
+```
+module:handleTerminals(function (terminalGroup)
+    if terminalGroup.vehicleStopAlignment == 'top' then
+        terminalGroup:addVehicleTerminalModel("station/tram/modular_tram_station/path/tram_stop_top.mdl", transform)
+    else
+        terminalGroup:addVehicleTerminalModel("station/tram/modular_tram_station/path/tram_stop_middle.mdl", transform)
+    end
+end)
+```
+
+##### adding combined terminals
+
+To add a vehicle and passenger/cargo terminal you can call `terminalGroup:addVehicleAndPassengerTerminalModel(modelId, modelTransformation, modelTerminalId)` (Parameters like the other above)
+
+##### disable terminal handling
+
+You can disable terminal handling for you module a track or platform by adding 'hasTerminals = false' to the modutram metradata.
+
+```
+metadata = {
+    modutram = {
+        hasTerminals = false
+    }
+},
+```
+
+#### handleLanes()
+
+The `handleLanes()` function will be called in all grid modules which are not part of a terminal. These models will be added at the normal way by useing the addModelFn().
+
 ### Utils
 
 Utils are tiny various functions which make module building easier.

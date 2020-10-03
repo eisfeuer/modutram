@@ -5,6 +5,7 @@ local GridModuleFactory = require('modutram.grid_module.factory')
 local GridSlotBuilder = require('modutram.slot.GridSlotBuilder')
 local SlotConfigRepository = require('modutram.slot.SlotConfigRepository')
 local optional = require('modutram.helper.optional')
+local TerminalHandler =  require("modutram.terminal.TerminalHandler")
 
 -- @module modutram.station
 local Station = {}
@@ -35,6 +36,11 @@ function Station:bindToResult(result)
             id = 'asset/icon/marker_question.mdl',
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }
         })
+    end
+
+    result.terminateConstructionHook = function ()
+        local terminalHandler = TerminalHandler:new{}
+        terminalHandler:addTerminalsFromGrid(self.grid, result)
     end
 end
 

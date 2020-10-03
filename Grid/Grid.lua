@@ -92,6 +92,12 @@ function Grid:getActiveGridSlotBounds()
     }
 end
 
+function Grid:each(callable)
+    self:eachColumn(function (column)
+        column:eachGridModule(callable)
+    end)
+end
+
 function Grid:eachColumn(callable)
     for i = self.bounds.left, self.bounds.right do
         if self:getColumn(i) then

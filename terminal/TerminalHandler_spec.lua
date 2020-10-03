@@ -4,13 +4,13 @@ local Slot = require("modutram.slot.Slot")
 local t = require("modutram.types")
 
 describe("TerminalHandler", function ()
-    describe("addTerminalsFromGrid", function ()
-        local moduleData = {
-            metadata = {
-                modutram_widthInCm = 100
-            }
+    local moduleData = {
+        metadata = {
+            modutram_widthInCm = 100
         }
+    }
 
+    describe("addTerminalsFromGrid", function ()
         local identMatrix = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 
         it ("creates terminals for a small even tram station", function ()
@@ -206,6 +206,37 @@ describe("TerminalHandler", function ()
                     }
                 }
             }, result)
+        end)
+    end)
+
+    describe('addNonTerminalLanesFromGrid', function ()
+        it ('handles all non terminal grid modules', function ()
+            local result = {models = {}}
+            local terminalHandler = TerminalHandler:new{}
+
+            local station = Station:new{}
+
+            station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 1, gridY = 1, yPos = 100}), moduleData)
+
+            station:registerModule(Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0, yPos = 0}), moduleData)
+            station:registerModule(Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 1, yPos = 0}), moduleData)
+
+            local testResult = {}
+
+            station.grid:get(0,0):handleLanes(function ()
+                table.insert(testResult, 1)
+            end)
+            station.grid:get(0,1):handleLanes(function ()
+                table.insert(testResult, 2)
+            end)
+            station.grid:get(1,1):handleLanes(function ()
+                table.insert(testResult, 3)
+            end)
+
+            terminalHandler:addTerminalsFromGrid(station.grid, result)
+            terminalHandler:addNonTerminalLanesFromGrid(station.grid)
+
+            assert.are.same({1}, testResult)
         end)
     end)
 end)

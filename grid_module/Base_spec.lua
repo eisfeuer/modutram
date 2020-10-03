@@ -216,6 +216,7 @@ describe("GridModule", function()
             local slot = Slot:new{id = Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0})}
             local testGridModule = GridModule:new{slot = slot}
 
+            assert.is_false(testGridModule.hasTerminals)
             local called = false
 
             testGridModule:handleTerminals(function ()
@@ -223,6 +224,24 @@ describe("GridModule", function()
             end)
 
             testGridModule:callTerminalHandleFunc()
+
+            assert.is_true(called)
+            assert.is_true(testGridModule.hasTerminals)
+        end)
+    end)
+
+    describe('handleLanes / callLaneHandleFunc', function ()
+        it('handles non terminal lanes', function ()
+            local slot = Slot:new{id = Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0})}
+            local testGridModule = GridModule:new{slot = slot}
+
+            local called = false
+
+            testGridModule:handleLanes(function ()
+                called = true
+            end)
+
+            testGridModule:callLaneHandleFunc()
 
             assert.is_true(called)
         end)

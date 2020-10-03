@@ -33,5 +33,12 @@ function TerminalHandler:addTerminalsFromGrid(grid, result)
     end)
 end
 
+function TerminalHandler:addNonTerminalLanesFromGrid(grid)
+    grid:each(function (gridModule)
+        if not gridModule.hasTerminals then
+            gridModule:callLaneHandleFunc()
+        end
+    end)
+end
 
 return TerminalHandler
