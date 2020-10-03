@@ -98,8 +98,26 @@ You can use the neighbor function like a normal module
 
 To check whether there is a void module you can call `module:isBlank()`
 
-### Lanes and Terminals
+### Tracks and Streets
+ATTENTION: Don't add tracks or street in the `handleTerminals()` or `handleLanes()` function.
 
+#### Streets
+To add a street to you module, you can use the funtion `modutram:addStreet(streetType, tram, edges, relativeSnapNodes)`
+Params:
+  streetType: street lua file (e.g. 'country_new_small.lua'),
+  tram: 'YES', 'NO', or 'ELECTRIC' - Tram rails on the street
+  edges: street edges (see the [official modding documentation](https://www.transportfever2.com/wiki/doku.php?id=modding:constructionbasics#edge_lists) for more details)
+  relativeSnapNodes (snap node relative to your own nodes - snap node of 0 means the first node of your edges)
+
+#### Tracks
+To add tracks to your module, you can use the function `modutram:addTrack(trackType, catenary, edges, relativeSnapNodes)`
+Params:
+  trackType: rail track lua file (e.g. 'high_speed.lua'),
+  catenary: true or false - tracks has catenary
+  edges: street edges (see the [official modding documentation](https://www.transportfever2.com/wiki/doku.php?id=modding:constructionbasics#edge_lists) for more details)
+  relativeSnapNodes (snap node relative to your own nodes - snap node of 0 means the first node of your edges)
+
+### Lanes and Terminals
 Lanes are models with pathes for road vehicles (including tram), passengers and cargo. How lane models structured and works you can see in the [official transport fever 2 modding documentation](https://www.transportfever2.com/wiki/doku.php?id=modding:resourcetypes:mdl#transport_network_provider).
 I recommmend to separate lane models from "real" models because lanes are place conditionalle how modules are placed.
 
@@ -108,39 +126,41 @@ Terminals are lane models which has a vehicle node (node where a vehicle stops),
 Modutram offers two function to handle lanes and terminals
 
 #### handleTerminals
-
 The `handleTerminals()` function will be called when you module is part of a terminal group. A terminal group include the module where a vehicle stops and all modules where passengers leaves the vehicle or are waiting for it.
 The `handleTerminals()` function has one parameter `terminalGroup`. Terminal Models MUST to be added via the `terminalGroup` model. Otherwise there won't be bind each other to a valid terminal group. 
 
 ##### Properties
-
 The `terminalGroup` has three properties:
 - trackDirection ('left' or 'right'): relevant for platforms - Direction of the current handled tracks - the `handleTerminals()` my be called twice for each trackDirection on islandPlatforms.
 - platformDirection ('left' or 'right'): relevant for tracks -  Direction of the current handled platform - the `handleTerminals()` my be called twice for each track on bidirectional track modules.
 - vehicleStopAlignment ('top' or 'middle'): relevant for tracks - Position of the stop node relative to the track module to create a stop node at the center of the whole terminal group.
 
 ##### adding passenger and cargo terminals
-
 To add a passenger or a cargo terminal you have to call `terminalGroup:addTerminalModel(modelId, modelTransformation, modelTerminalId)` on a platform module
 params:
   modelId: Id (filename of the mdl file) of the terminal model
   transformation: tranformation matrix (pivot center of the station) of the terminal model
   modelTerminalId (optional, default = 0): Id of the terminal defined in the terminal model
+Return: position in the result.models (starting from 0)
 
 Example
-```
+```lua
 module:handleTerminals(function (terminalGroup)
     terminalGroup:addTerminalModel('station/tram/modular_tram_station/path/passenger_terminal.mdl', transform)
 end)
 ```
 
-##### adding vehicle terminals
+You can use an existing model as terminal using `terminalGroup:attachTerminal(modelPosition, modelTerminalId)`
+params:
+  modelPosition: position of the model in the result.models (starting from 0)
+  modelTerminalId (optional, default = 0): Id of the terminal defined in the terminal model
 
+##### adding vehicle terminals
 To add a vehicle terminal you have to call `terminalGroup:addVehicleTerminalModel(modelId, modelTransformation, modelTerminalId)` on a track module.
 The pareters are the same as passenger/cargo modules
 
 Example:
-```
+```lua
 module:handleTerminals(function (terminalGroup)
     if terminalGroup.vehicleStopAlignment == 'top' then
         terminalGroup:addVehicleTerminalModel("station/tram/modular_tram_station/path/tram_stop_top.mdl", transform)
@@ -150,12 +170,42 @@ module:handleTerminals(function (terminalGroup)
 end)
 ```
 
-##### adding combined terminals
+You can use an existing model as vehicle terminal using `terminalGroup:attachVehicleTerminal(modelPosition, modelTerminalId)`
+The pareters are the same as passenger/cargo modules
 
+##### adding combined terminals
 To add a vehicle and passenger/cargo terminal you can call `terminalGroup:addVehicleAndPassengerTerminalModel(modelId, modelTransformation, modelTerminalId)` (Parameters like the other above)
 
-##### disable terminal handling
+#### adding tracks
+ATTENTION don't create tracks in the handleTerminals() function. It may crash the game
 
+the `addTrack()` function returns an index. This index is the first node of the passed in edges.
+You can use this index to add a vehicleNode on this track.
+
+To add a vehicle node use `terminalGroup:attachVehicleTrackNode(edgeListType, catenaryOrTram, nodeIndex)`
+Params
+- edgeListType: lua file of track or street (e.g. high_speed.lua)
+- catenaryOrTram: true or false if track; 'NO', 'YES', 'ELECTRIC' if street
+- nodeIndex: node index (returned by the `addTrack()`/`addStreet()` function)
+
+If you want to add the first node of your edges add the node position to the index.
+
+Example:
+```lua
+local nodeIndex = modutram:addTrack("high_speed.lua", true, {
+    {{-10, 0, 0}, {10, 0, 0,}},
+    {{0, 0, 0}, {10, 0, 0,}},
+
+    {{0, 0, 0}, {10, 0, 0,}}, -- node to attach
+    {{10, 0, 0}, {10, 0, 0,}},
+})
+
+module:handleTerminals(function (terminalGroup)
+    terminalGroup:attachVehicleTrackNode("high_speed.lua", true, nodeIndex + 2)
+end)
+```
+
+##### disable terminal handling
 You can disable terminal handling for you module a track or platform by adding 'hasTerminals = false' to the modutram metradata.
 
 ```
@@ -167,11 +217,9 @@ metadata = {
 ```
 
 #### handleLanes()
-
 The `handleLanes()` function will be called in all grid modules which are not part of a terminal. These models will be added at the normal way by useing the addModelFn().
 
 ### Utils
-
 Utils are tiny various functions which make module building easier.
 
 #### makeGroundFaceFromGridModule
@@ -204,7 +252,6 @@ local groundFace = makeGroundFaceFromGridModule(module, transform)
 makeLot(result, groundFace, "shared/asphalt_01.gtex.lua", "street_border.lua")
 ```
 ## Build own tram station
-
 If your modules doesn't to the standard station, you can define a station with our own namespace and change the properties that you need to.
 
 Your module types must start with the prefix `modutra_your_namespace`.  

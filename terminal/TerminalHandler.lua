@@ -9,19 +9,21 @@ function TerminalHandler:new(o)
     return o
 end
 
-function TerminalHandler:addTerminalsFromGrid(grid, result)
+function TerminalHandler:addTerminalsFromGrid(grid, result, edgeListMap)
     grid:eachColumn(function (column)
         local leftTerminalGroupHandler = TerminalGroupHandler:new{
             neighborDirection = 'left',
             neighborGridX = column.gridX - 1,
             grid = grid,
-            result = result
+            result = result,
+            edgeListMap = edgeListMap
         }
         local rightTerminalGroupHandler = TerminalGroupHandler:new{
             neighborDirection = 'right',
             neighborGridX = column.gridX + 1,
             grid = grid,
-            result = result
+            result = result,
+            edgeListMap = edgeListMap
         }
 
         column:eachWithEmpty(function (gridModule)

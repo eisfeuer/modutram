@@ -5,7 +5,8 @@ local GridModuleFactory = require('modutram.grid_module.factory')
 local GridSlotBuilder = require('modutram.slot.GridSlotBuilder')
 local SlotConfigRepository = require('modutram.slot.SlotConfigRepository')
 local optional = require('modutram.helper.optional')
-local TerminalHandler =  require("modutram.terminal.TerminalHandler")
+local TerminalHandler = require("modutram.terminal.TerminalHandler")
+local EdgeListMap = require("modutram.edge_list.EdgeListMap")
 
 -- @module modutram.station
 local Station = {}
@@ -30,6 +31,9 @@ function Station:bindToResult(result)
     result.slots = gridSlotBuilder:placeGridSlots(slotConfigRepository)
     result.terrainAlignmentLists = result.terrainAlignmentLists or {}
     result.groundFaces = result.groundFaces or {}
+    result.edgeLists = {}
+
+    self.edgeListMap = EdgeListMap:new{edgeLists = result.edgeLists}
 
     if #result.models == 0 then
         table.insert(result.models, {
@@ -40,7 +44,7 @@ function Station:bindToResult(result)
 
     result.terminateConstructionHook = function ()
         local terminalHandler = TerminalHandler:new{}
-        terminalHandler:addTerminalsFromGrid(self.grid, result)
+        terminalHandler:addTerminalsFromGrid(self.grid, result, self.edgeListMap)
     end
 end
 
@@ -70,6 +74,30 @@ end
 
 function Station:isModuleAt(gridX, gridY)
     return self.grid:has(gridX, gridY)
+end
+
+function Station:addEdgeList(edgeListType, catenaryOrTram, edges, relativeSnapNodes)
+    local edgeList = self.edgeListMap:getOrCreateEdgeList(edgeListType, catenaryOrTram)
+    local positionOfFirstEdge = #edgeList.edges
+    relativeSnapNodes = relativeSnapNodes or {}
+
+    for _, edge in pairs(edges) do
+        table.insert(edgeList.edges, edge)
+    end
+
+    for _, relativeSnapNode in pairs(relativeSnapNodes) do
+        table.insert(edgeList.snapNodes, relativeSnapNode + positionOfFirstEdge)
+    end
+
+    return positionOfFirstEdge
+end
+
+function Station:addStreet(streetType, tram, edges, relativeSnapNodes)
+    return self:addEdgeList(streetType, tram, edges, relativeSnapNodes)
+end
+
+function Station:addTrack(trackType, catenary, edges, relativeSnapNodes)
+    return self:addEdgeList(trackType, catenary, edges, relativeSnapNodes)
 end
 
 return Station

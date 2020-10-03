@@ -12,22 +12,42 @@ function TerminalGroup:new(o)
 end
 
 function TerminalGroup:addTerminalModel(modelId, modelTransformation, modelTerminalId)
+    local modelPosition = self:addModelAndGetPosition(modelId, modelTransformation)
+    self:attachTerminal(modelPosition, modelTerminalId)
+
+    return modelPosition
+end
+
+function TerminalGroup:addVehicleTerminalModel(modelId, modelTransformation, modelTerminalId, hasPassengers)
+    local modelPosition = self:addModelAndGetPosition(modelId, modelTransformation)
+
+    self:attachVehicleTerminal(modelPosition, modelTerminalId)
+    self.vehicleTerminalHasPassengerTerminal = hasPassengers or false
+
+    return modelPosition
+end
+
+function TerminalGroup:attachVehicleTerminal(modelPosition, modelTerminalId)
+    self.vehicleTerminal = {
+        modelPosition,
+        modelTerminalId or 0
+    }
+end
+
+function TerminalGroup:attachTerminal(modelPosition, modelTerminalId)
     table.insert(self.terminals, {
-        self:addModelAndGetPosition(modelId, modelTransformation),
+        modelPosition,
         modelTerminalId or 0
     })
 end
 
-function TerminalGroup:addVehicleTerminalModel(modelId, modelTransformation, modelTerminalId, hasPassengers)
-    self.vehicleTerminal = {
-        self:addModelAndGetPosition(modelId, modelTransformation),
-        modelTerminalId or 0
-    }
-    self.vehicleTerminalHasPassengerTerminal = hasPassengers or false
-end
-
 function TerminalGroup:addVehicleAndPassengerTerminalModel(modelId, modelTransformation, modelTerminalId)
     self:addVehicleTerminalModel(modelId, modelTransformation, modelTerminalId, true)
+end
+
+function TerminalGroup:attachVehicleTrackNode(edgeListType, catenaryOrTram, nodeIndex)
+    local edgeListStartIndex = self.edgeListMap:getIndexOfFirstNodeInEdgeList(edgeListType, catenaryOrTram)
+    self.vehicleNodeOverride = edgeListStartIndex + nodeIndex
 end
 
 function TerminalGroup:addModelAndGetPosition(modelId, modelTransformation)
@@ -49,7 +69,7 @@ function TerminalGroup:addModelAndGetPosition(modelId, modelTransformation)
 end
 
 function TerminalGroup:isValid()
-    if not self.vehicleTerminal then
+    if not (self.vehicleTerminal or self.vehicleNodeOverride) then
         return false
     end
 
@@ -69,7 +89,13 @@ function TerminalGroup:addToResult()
         terminals = {}
     }
 
-    table.insert(resultTerminalGroup.terminals, self.vehicleTerminal)
+    if self.vehicleTerminal then
+        table.insert(resultTerminalGroup.terminals, self.vehicleTerminal)
+    elseif self.vehicleNodeOverride then
+        resultTerminalGroup.vehicleNodeOverride = self.vehicleNodeOverride
+    else
+        error('no vehicle node')
+    end
     
     for _, terminal in pairs(self.terminals) do
         table.insert(resultTerminalGroup.terminals, terminal)

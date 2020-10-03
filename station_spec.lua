@@ -114,4 +114,191 @@ describe('Station', function ()
             assert.is_false(station:isModuleAt(1,3))
         end)
     end)
+
+    describe('addStreet', function ()
+        it ('adds a street to construction', function ()
+            local station = Station:new{}
+            local result = {}
+
+            station:bindToResult(result)
+
+            assert.are.equal(0, station:addStreet('autobahn.lua', 'NO', {
+                { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+            }))
+
+            assert.are.same({
+                {
+                    type = 'STREET',
+                    params = {
+                        type = 'autobahn.lua',
+                        tramTrackType = 'NO'
+                    },
+                    edges = {
+                        { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }
+            }, result.edgeLists)
+
+            assert.are.equal(2, station:addStreet('autobahn.lua', 'NO', {
+                { { -1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                { {  1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+            }, {1}))
+
+            assert.are.same({
+                {
+                    type = 'STREET',
+                    params = {
+                        type = 'autobahn.lua',
+                        tramTrackType = 'NO'
+                    },
+                    edges = {
+                        { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { { -1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {3},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }
+            }, result.edgeLists)
+
+            assert.are.equal(0, station:addStreet('landstrasse.lua', 'ELECTRIC', {
+                { { -1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                { {  1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+            }, {1}))
+
+
+            assert.are.same({
+                {
+                    type = 'STREET',
+                    params = {
+                        type = 'autobahn.lua',
+                        tramTrackType = 'NO'
+                    },
+                    edges = {
+                        { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { { -1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {3},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }, {
+                    type = 'STREET',
+                    params = {
+                        type = 'landstrasse.lua',
+                        tramTrackType = 'ELECTRIC'
+                    },
+                    edges = {
+                        { { -1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {1},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }
+            }, result.edgeLists)
+        end)
+    end)
+
+    describe('addTrack', function ()
+        it ('adds a track to construction', function ()
+            local station = Station:new{}
+            local result = {}
+
+            station:bindToResult(result)
+
+            assert.are.equal(0, station:addTrack('monorail.lua', false, {
+                { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+            }))
+
+            assert.are.same({
+                {
+                    type = 'TRACK',
+                    params = {
+                        type = 'monorail.lua',
+                        catenary = false
+                    },
+                    edges = {
+                        { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }
+            }, result.edgeLists)
+
+            assert.are.equal(2, station:addStreet('monorail.lua', false, {
+                { { -1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                { {  1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+            }, {1}))
+
+            assert.are.same({
+                {
+                    type = 'TRACK',
+                    params = {
+                        type = 'monorail.lua',
+                        catenary = false
+                    },
+                    edges = {
+                        { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { { -1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {3},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }
+            }, result.edgeLists)
+
+            assert.are.equal(0, station:addStreet('high_speed.lua', true, {
+                { { -1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                { {  1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+            }, {1}))
+
+
+            assert.are.same({
+                {
+                    type = 'TRACK',
+                    params = {
+                        type = 'monorail.lua',
+                        catenary = false
+                    },
+                    edges = {
+                        { { -1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 0.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { { -1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {3},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }, {
+                    type = 'TRACK',
+                    params = {
+                        type = 'high_speed.lua',
+                        catenary = true
+                    },
+                    edges = {
+                        { { -1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                        { {  1.0, -1.0, 0.0 }, { 2.0, 0.0, 0.0 } },
+                    },
+                    snapNodes = {1},
+                    freeNodes = {},
+                    tag2nodes = {},
+                }
+            }, result.edgeLists)
+        end)
+    end)
+
 end)

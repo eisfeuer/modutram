@@ -58,6 +58,7 @@ function TerminalGroupHandler:initializeTerminalGroup(trackGridModule)
 
     self.terminalGroup = TerminalGroup:new{
         result = self.result,
+        edgeListMap = self.edgeListMap,
         trackDirection = self.neighborDirection,
         platformDirection = oppositeDirection
     }
