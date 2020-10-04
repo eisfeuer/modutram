@@ -36,6 +36,38 @@ describe('Station', function ()
             assert.are.equal(1435, result:getOption('trackGauge'))
             assert.are.equal(1.5, result:getOption('trackWidth'))
         end)
+
+        it ('ignores asset, when there are no grid module to bind', function ()
+            local station = Station:new{}
+
+            local result = station:registerModule(Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 3}), {
+                metadata = {
+                    modutram = {
+                        trackGauge = 1435
+                    },
+                    modutram_trackWidth = 1.5
+                }
+            })
+
+            assert.is_nil(result)
+            assert.is_false(station.grid:has(1,2))
+        end)
+
+        it ('registers asset module', function ()
+            local station = Station:new{}
+
+            station:registerModule(Slot.makeId({type = t.PLATFORM_ISLAND, gridX = 1, gridY = 2}))
+            local result = station:registerModule(Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 3}), {
+                metadata = {
+                    modutram = {
+                        trackGauge = 1435
+                    },
+                    modutram_trackWidth = 1.5
+                }
+            })
+
+            assert.are_not.is_nil(result)
+        end)
     end)
 
     describe('registerAllModules', function ()
@@ -51,6 +83,13 @@ describe('Station', function ()
                 metadata = {
                     modutram = {
                         trackGauge = 1000
+                    },
+                }
+            },
+            [Slot.makeId({type = t.ASSET, gridX = -1, gridY = 3, assetId = 9})] = {
+                metadata = {
+                    modutram = {
+                        height = 1500
                     },
                 }
             },

@@ -21,7 +21,8 @@ describe("GridModule", function()
 
     local config = {
         gridModuleLength = 20,
-        baseHeight = 10
+        baseHeight = 10,
+        defaultAssetSlotSpacing = {1, 1, 1, 1}
     }
     local gridModule = GridModule:new{slot = slot, options = {platformHeight = 0.96}, config = config}
 
@@ -111,8 +112,8 @@ describe("GridModule", function()
     describe('hasNeighborLeft', function ()
         it('checks weather grid element has left neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local leftNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = -1, gridY = 0}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local leftNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = -1, gridY = 0}))
 
             assert.is_true(testGridElement:hasNeighborLeft())
             assert.is_false(leftNeighbor:hasNeighborLeft())
@@ -122,8 +123,8 @@ describe("GridModule", function()
     describe('getNeighborLeft', function ()
         it('returns left neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local leftNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = -1, gridY = 0}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local leftNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = -1, gridY = 0}))
 
             assert.are.equal(leftNeighbor, testGridElement:getNeighborLeft())
         end)
@@ -132,8 +133,8 @@ describe("GridModule", function()
     describe('hasNeighborRight', function ()
         it('checks weather grid element has right neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local rightNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 1, gridY = 0}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local rightNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 1, gridY = 0}))
 
             assert.is_true(testGridElement:hasNeighborRight())
             assert.is_false(rightNeighbor:hasNeighborRight())
@@ -143,8 +144,8 @@ describe("GridModule", function()
     describe('getNeighborRight', function ()
         it('returns right neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local rightNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 1, gridY = 0}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local rightNeighbor = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 1, gridY = 0}))
 
             assert.are.equal(rightNeighbor, testGridElement:getNeighborRight())
         end)
@@ -153,8 +154,8 @@ describe("GridModule", function()
     describe('hasNeighborTop', function ()
         it('checks weather grid element has top neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local neightborTop = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 1}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local neightborTop = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 1}))
 
             assert.is_true(testGridElement:hasNeighborTop())
             assert.is_false(neightborTop:hasNeighborTop())
@@ -164,8 +165,8 @@ describe("GridModule", function()
     describe('getNeighborTop', function ()
         it('returns top neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local neighborTop = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 1}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local neighborTop = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 1}))
 
             assert.are.equal(neighborTop, testGridElement:getNeighborTop())
         end)
@@ -174,8 +175,8 @@ describe("GridModule", function()
     describe('hasNeighborBottom', function ()
         it('checks weather grid element has bottom neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local neightborBottom = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = -1}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local neightborBottom = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = -1}))
 
             assert.is_true(testGridElement:hasNeighborBottom())
             assert.is_false(neightborBottom:hasNeighborBottom())
@@ -185,8 +186,8 @@ describe("GridModule", function()
     describe('getNeighborBottom', function ()
         it('returns bottom neighbor', function ()
             local station = Station:new{}
-            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = 0}))
-            local neighborBottom = station:registerModule(Slot.makeId({type = t.PLATFORM, gridX = 0, gridY = -1}))
+            local testGridElement = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = 0}))
+            local neighborBottom = station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 0, gridY = -1}))
 
             assert.are.equal(neighborBottom, testGridElement:getNeighborBottom())
         end)
@@ -244,6 +245,92 @@ describe("GridModule", function()
             testGridModule:callLaneHandleFunc()
 
             assert.is_true(called)
+        end)
+    end)
+
+    describe('getConfig', function ()
+        it('returns config', function ()
+            assert.are.equal(config, gridModule:getConfig())
+        end)
+    end)
+
+    describe("registerAsset", function ()
+        it("registers asset", function ()
+            local assetSlotId = Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 12})
+            local assetSlot = Slot:new{id = assetSlotId}
+            local asset = gridModule:registerAsset(assetSlot)
+
+            assert.are.equal(assetSlotId, asset:getSlotId())
+            assert.are.equal(1, asset:getGridX())
+            assert.are.equal(2, asset:getGridY())
+        end)
+    end)
+
+    describe("hasAsset", function ()
+        it ("checks whether grid element has asset", function ()
+            assert.is_true(gridModule:hasAsset(12))
+            assert.is_false(gridModule:hasAsset(14))
+        end)
+    end)
+
+    describe("getAsset", function ()
+        it ("returns asset", function ()
+            local assetSlotId = Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 12})
+            local asset = gridModule:getAsset(12)
+
+            assert.are.equal(assetSlotId, asset:getSlotId())
+            assert.are.equal(1, asset:getGridX())
+            assert.are.equal(2, asset:getGridY())
+
+            assert.are.equal(nil, gridModule:getAsset(14))
+        end)
+    end)
+
+    describe("addAssetSlot", function ()
+        it("adds asset slot to collection (1m above the base slot)", function ()
+            local result = {
+                slots = {}
+            }
+
+            local matrix = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                2, 1, 0, 1
+            }
+
+            gridModule:addAssetSlot(result, 3, 'modutram_asset', matrix)
+
+            assert.are.same({{
+                id = Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 3}),
+                transf = matrix,
+                type = 'modutram_asset',
+                spacing = gridModule.config.defaultAssetSlotSpacing,
+                shape = 0
+            }}, result.slots)
+        end)
+
+        it("adds custom asset slot", function ()
+            local result = {
+                slots = {}
+            }
+
+            local matrix = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                2, 1, 0, 1
+            }
+
+            gridModule:addAssetSlot(result, 3, 'modutram_asset_building', matrix, {1, 2, 3, 4}, 2)
+
+            assert.are.same({{
+                id = Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 3}),
+                transf = matrix,
+                type = 'modutram_asset_building',
+                spacing = {1, 2, 3, 4},
+                shape = 2
+            }}, result.slots)
         end)
     end)
 end)

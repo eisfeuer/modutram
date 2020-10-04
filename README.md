@@ -98,6 +98,32 @@ You can use the neighbor function like a normal module
 
 To check whether there is a void module you can call `module:isBlank()`
 
+### Basic module functions
+
+#### getId()
+Access the slot id of the module
+
+#### getType()
+Access the module type. The module type is represented by an integer value. It is not possible to define own types.
+You can import a table with all type with `local t = require("modutram.types")`. All types are referenced at the [List of slot types](### List of slot types).
+
+### getGridX()
+Access the X-Cooridinate (Horizontal) of the grid (not the real position)
+
+### getGridY()
+Access the Y-Cooridinate (Vertical) of the grid (not the real position)
+
+### Additional grid module functions
+
+### getAbsoluteX()
+Access to the x position of the grid module
+
+### getAbsoluteY()
+Access to the y position of the grid module
+
+### getAbsoluteZ()
+Access to the z position of the grid module
+
 ### Tracks and Streets
 ATTENTION: Don't add tracks or street in the `handleTerminals()` or `handleLanes()` function.
 
@@ -176,7 +202,7 @@ The pareters are the same as passenger/cargo modules
 ##### adding combined terminals
 To add a vehicle and passenger/cargo terminal you can call `terminalGroup:addVehicleAndPassengerTerminalModel(modelId, modelTransformation, modelTerminalId)` (Parameters like the other above)
 
-#### adding tracks
+##### adding tracks
 ATTENTION don't create tracks in the handleTerminals() function. It may crash the game
 
 the `addTrack()` function returns an index. This index is the first node of the passed in edges.
@@ -218,6 +244,25 @@ metadata = {
 
 #### handleLanes()
 The `handleLanes()` function will be called in all grid modules which are not part of a terminal. These models will be added at the normal way by useing the addModelFn().
+
+### Assets
+Assets are modules which are placable on grid modules. Assets are e.g. buildings, street connections, roofes or decoration stuff.
+
+#### Add asset slot to grid module
+To add an asset slot to a grid module you have to call the function `gridModule:addAssetSlot(result, assetId, slotType, transformation, spacing, shape)`
+Params:
+ result: the result param from the `updateFn()`
+ assetId: The asset id (Choosen number between 1 and 255). Each asset slot at the grid element should have different asset ids. Look at the reference for common asset slot ids (@todo).
+ slotType: Slot type of the asset slot ('modutram_asset' is the general asset slot type)
+ transformation: slot transformation
+ spacings: slot spacings (see [official modding documentation](https://www.transportfever2.com/wiki/doku.php?id=modding:modularconstructions#construction_updatefn))
+ shape: slot shape (see official [modding documentation](https://www.transportfever2.com/wiki/doku.php?id=modding:modularconstructions#construction_updatefn))
+
+#### Access grid module
+You can access the grid module where the asset is bind by calling the function `asset:getParentGridModule()`
+
+#### Access asset id
+You gets the asset id by calling the function `asset:getAssetId()`
 
 ### Utils
 Utils are tiny various functions which make module building easier.

@@ -7,6 +7,7 @@ local SlotConfigRepository = require('modutram.slot.SlotConfigRepository')
 local optional = require('modutram.helper.optional')
 local TerminalHandler = require("modutram.terminal.TerminalHandler")
 local EdgeListMap = require("modutram.edge_list.EdgeListMap")
+local t = require("modutram.types")
 
 -- @module modutram.station
 local Station = {}
@@ -50,10 +51,23 @@ end
 
 function Station:registerModule(slotId, moduleData)
     local slot = Slot:new({id = slotId, moduleData = moduleData})
-    local gridModule = GridModuleFactory.make(slot, self.grid, self.config)
 
-    self.grid:set(gridModule)
-    return gridModule
+    if slot:isGridModule() then
+        local gridModule = GridModuleFactory.make(slot, self.grid, self.config)
+        self.grid:set(gridModule)
+
+        return gridModule
+    end
+
+    if slot.type == t.ASSET then
+        local gridModule = self.grid:get(slot.gridX, slot.gridY)
+
+        if gridModule:isBlank() then
+            return nil
+        end
+
+        return gridModule:registerAsset(slot)
+    end
 end
 
 function Station:registerAllModules(modulesFromParams)

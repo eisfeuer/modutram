@@ -1,6 +1,8 @@
 local except = require("modutram.helper.except")
 local optional = require('modutram.helper.optional')
 local t = require('modutram.types')
+local Asset = require("modutram.asset_module.Asset")
+local Slot = require("modutram.slot.Slot")
 
 -- @module modutram.grid_module.Base
 local GridModuleBase = {}
@@ -34,6 +36,7 @@ function GridModuleBase:new(o)
     o.options = o.options or {}
     o.possibleLeftNeighbors = gridTypes
     o.possibleRightNeighbors = gridTypes
+    o.assets = {}
 
     setmetatable(o, self)
     self.__index = self
@@ -186,6 +189,52 @@ function GridModuleBase:callLaneHandleFunc()
     if self.laneHandleFunc then
         self.laneHandleFunc()
     end
+end
+
+function GridModuleBase:getConfig()
+    return self.config
+end
+
+function GridModuleBase:registerAsset(slot, options)
+    options = options or {}
+
+    if not slot.assetId or slot.assetId == 0 then
+        error('Module not an asset')
+    end
+
+    if self:hasAsset(slot.assetId) then
+        error('Asset already registered')
+    end
+
+    local asset = Asset:new{parent = self, slot = slot, options = options}
+    self.assets[slot.assetId] = asset
+
+    return asset
+end
+
+function GridModuleBase:hasAsset(assetId)
+    return self:getAsset(assetId) ~= nil
+end
+
+function GridModuleBase:getAsset(assetId)
+    return self.assets[assetId]
+end
+
+function GridModuleBase:addAssetSlot(result, assetSlotId, slotType, transformation, spacing, shape)
+    local slotId = Slot.makeId({
+        type = t.ASSET,
+        gridX = self:getGridX(),
+        gridY = self:getGridY(),
+        assetId = assetSlotId
+    })
+
+    table.insert(result.slots, {
+        id = slotId,
+        transf = transformation,
+        type = slotType,
+        spacing = spacing or self.config.defaultAssetSlotSpacing,
+        shape = shape or 0
+    })
 end
 
 return GridModuleBase
