@@ -105,26 +105,26 @@ Access the slot id of the module
 
 #### getType()
 Access the module type. The module type is represented by an integer value. It is not possible to define own types.
-You can import a table with all type with `local t = require("modutram.types")`. All types are referenced at the [List of slot types](### List of slot types).
+You can import a table with all type with `local t = require("modutram.types")`. All types are referenced at the [List of slot types](#list-of-slot-types).
 
-### getGridX()
+#### getGridX()
 Access the X-Cooridinate (Horizontal) of the grid (not the real position)
 
-### getGridY()
+#### getGridY()
 Access the Y-Cooridinate (Vertical) of the grid (not the real position)
 
 ### Additional grid module functions
 
-### getAbsoluteX()
+#### getAbsoluteX()
 Access to the x position of the grid module
 
-### getAbsoluteY()
+#### getAbsoluteY()
 Access to the y position of the grid module
 
-### getAbsoluteZ()
+#### getAbsoluteZ()
 Access to the z position of the grid module
 
-### Tracks and Streets
+#### Tracks and Streets
 ATTENTION: Don't add tracks or street in the `handleTerminals()` or `handleLanes()` function.
 
 #### Streets
