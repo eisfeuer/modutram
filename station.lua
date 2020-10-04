@@ -68,10 +68,42 @@ function Station:registerModule(slotId, moduleData)
 
         return gridModule:registerAsset(slot)
     end
+
+    if slot.type == t.DECORATION then
+        local gridModule = self.grid:get(slot.gridX, slot.gridY)
+        if gridModule:isBlank() then
+            return nil
+        end
+
+        local asset = gridModule:getAsset(slot.assetId)
+        if not asset then
+            return nil
+        end
+
+        return asset:registerDecoration(slot)
+    end
 end
 
 function Station:registerAllModules(modulesFromParams)
+    local assets = {}
+    local decorations = {}
+
     for slotId, moduleData in pairs(modulesFromParams) do
+        local slotType = Slot.getTypeFromId(slotId)
+        if slotType == t.ASSET then
+            assets[slotId] = moduleData
+        elseif slotType == t.DECORATION then
+            decorations[slotId] = moduleData
+        else
+            self:registerModule(slotId, moduleData)
+        end
+    end
+
+    for slotId, moduleData in pairs(assets) do
+        self:registerModule(slotId, moduleData)
+    end
+
+    for slotId, moduleData in pairs(decorations) do
         self:registerModule(slotId, moduleData)
     end
 end

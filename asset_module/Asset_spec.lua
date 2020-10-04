@@ -11,8 +11,8 @@ describe('Asset', function ()
     local assetSlot = Slot:new{id = Slot.makeId({type = t.ASSET, gridX = 2, gridY = 4, assetId = 1}), moduleData = { metadata = {modutram_width = 3 }}}
     local asset = Asset:new{slot = assetSlot, parent = platform, options = {height = 23, poleRadius = 2}}
     local config = station.config
-    --local decorationAssetSlot = Slot:new{id = Slot.makeId({type = t.ASSET_DECORATION, gridX = 2, gridY = 4, assetId = 1, assetDecorationId = 2 })}
-    --local decoration = asset:registerDecoration(2, decorationAssetSlot, {anOption = 'value'})
+    local decorationAssetSlot = Slot:new{id = Slot.makeId({type = t.ASSET_DECORATION, gridX = 2, gridY = 4, assetId = 1, decorationId = 2 })}
+    local decoration = asset:registerDecoration(decorationAssetSlot)
 
     describe('getParentGridModule', function ()
         it('returns parent grid element', function ()
@@ -80,66 +80,64 @@ describe('Asset', function ()
         end)
     end)
 
-    -- describe("registerDecoration / getDecoration / hasDecoration", function ()
-    --     it("registers asset", function ()
-    --         assert.is_true(asset:hasDecoration(2))
-    --         assert.are.equal(decorationAssetSlot.id, asset:getDecoration(2):getSlotId())
-    --         assert.are.equal("value", asset:getDecoration(2):getOption('anOption'))
-    --     end)
+    describe("registerDecoration / getDecoration / hasDecoration", function ()
+        it("registers asset", function ()
+            assert.is_true(asset:hasDecoration(2))
+            assert.are.equal(decorationAssetSlot.id, asset:getDecoration(2):getSlotId())
+        end)
 
-    --     it("returns nil when no asset is at given slot", function ()
-    --         assert.is_nil(asset:getDecoration(3))
-    --         assert.is_false(asset:hasDecoration(3))
-    --     end)
-    -- end)
+        it("returns nil when no asset is at given slot", function ()
+            assert.is_nil(asset:getDecoration(3))
+            assert.is_false(asset:hasDecoration(3))
+        end)
+    end)
 
-    -- describe("addDecorationSlot", function ()
-    --     it("adds asset slot to collection (2m above the base slot)", function ()
-    --         local slots = {}
+    describe("addDecorationSlot", function ()
+        it("adds asset slot to collection (2m above the base slot)", function ()
+            local result = {
+                slots = {}
+            }
 
-    --         asset:addDecorationSlot(slots, 3)
-    --         local gridElement = asset:getParentGridModule()
+            local matrix = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                2, 1, 0, 1
+            }
 
-    --         assert.are.same({{
-    --             id = Slot.makeId({type = t.ASSET_DECORATION, gridX = 2, gridY = 4, assetId = 1, assetDecorationId = 3}),
-    --             transf = {
-    --                 1, 0, 0, 0,
-    --                 0, 1, 0, 0,
-    --                 0, 0, 1, 0,
-    --                 gridElement:getAbsoluteX(), gridElement:getAbsoluteY(), 2, 1
-    --             },
-    --             type = 'motras_asset_decoration',
-    --             spacing = c.DEFAULT_ASSET_SLOT_SPACING,
-    --             shape = 0
-    --         }}, slots)
-    --     end)
+            asset:addDecorationSlot(result, 3, 'modutram_decoration_clock', matrix)
 
-    --     it("adds custom asset slot", function ()
-    --         local slots = {}
-    --         local gridElement = asset:getParentGridModule()
+            assert.are.same({{
+                id = Slot.makeId({type = t.DECORATION, gridX = 2, gridY = 4, assetId = 1, decorationId = 3}),
+                transf = matrix,
+                type = 'modutram_decoration_clock',
+                spacing = config.defaultAssetSlotSpacing,
+                shape = 0
+            }}, result.slots)
+        end)
 
-    --         asset:addDecorationSlot(slots, 3, {
-    --             assetType = t.ASSET_DECORATION,
-    --             slotType = 'decoration',
-    --             position = {1, 2, 4},
-    --             global = false,
-    --             spacing = {1,1,1,1},
-    --             shape = 2
-    --         })
+        it("adds custom decoration slot", function ()
+            local result = {
+                slots = {}
+            }
 
-    --         assert.are.same({{
-    --             id = Slot.makeId({type = t.ASSET_DECORATION, gridX = 2, gridY = 4, assetId = 1, assetDecorationId = 3}),
-    --             transf = {
-    --                 1, 0, 0, 0,
-    --                 0, 1, 0, 0,
-    --                 0, 0, 1, 0,
-    --                 1, 2, 4, 1
-    --             },
-    --             type = 'decoration',
-    --             spacing = {1, 1, 1, 1},
-    --             shape = 2
-    --         }}, slots)
-    --     end)
-    -- end)
+            local matrix = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                2, 1, 0, 1
+            }
+
+            asset:addDecorationSlot(result, 3, 'modutram_decoration_clock', matrix, {1, 2, 3, 4}, 2)
+
+            assert.are.same({{
+                id = Slot.makeId({type = t.DECORATION, gridX = 2, gridY = 4, assetId = 1, decorationId = 3}),
+                transf = matrix,
+                type = 'modutram_decoration_clock',
+                spacing = {1, 2, 3, 4},
+                shape = 2
+            }}, result.slots)
+        end)
+    end)
 
 end)

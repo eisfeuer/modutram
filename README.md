@@ -1,5 +1,6 @@
 # modutram
 Modular Tram Station Framework for Transport Fever 2
+THIS PROJECT AND THIS DOCUMENTATION ARE WIP
 
 ## Build own module
 
@@ -264,6 +265,16 @@ You can access the grid module where the asset is bind by calling the function `
 #### Access asset id
 You gets the asset id by calling the function `asset:getAssetId()`
 
+### Decorations
+Decorations are modules you can fix on assets. For example a clock on the station building.
+
+#### Add decoration slots
+You may define decoration slots on assets. To add an decoration slot to a asset you have to call the function `asset:addDecorationSlot(result, decorationId, slotType, transformation, spacing, shape)`
+`decorationId` is like the asset id on asset slots. All other ids are the same like the `addAssetSlot()` function
+
+#### Access parent modules
+You can access the asset by calling `getParentAsset()`. You has access to the grid module by calling `getParentGridModule()`
+
 ### Utils
 Utils are tiny various functions which make module building easier.
 
@@ -328,7 +339,7 @@ motrasStation.updateScript.fileName = "construction/station/tram/my_tram_station
 motrasStation.updateScript.params = {modules = modulesForMyTramStation}
 ```
 
-Create a file `construction/station/tram/my_tram_station`.script` and put folliwing code in it
+Create a file `construction/station/tram/my_tram_station.script` and put folliwing code in it
 ```lua
 local Modutram = require('modutram.modutram')
 
@@ -338,6 +349,7 @@ function data()
             local config = {
                 gridModuleLength = 18, -- length (size on y axis) of a module
                 baseHeight = 0, -- offset of the ground level compared to the ground level of the game
+                defaultAssetSlotSpacing = {1, 1, 1, 1},
                 -- @todo put config example here
             }
 

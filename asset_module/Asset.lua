@@ -1,6 +1,7 @@
-local Slot = require('modutram.slot.Slot')
-local t = require('modutram.types')
-local optional = require('modutram.helper.optional')
+local Slot = require("modutram.slot.Slot")
+local t = require("modutram.types")
+local optional = require("modutram.helper.optional")
+local Decoration = require("modutram.asset_module.Decoration")
 
 local Asset = {}
 
@@ -8,7 +9,7 @@ function Asset:new(o)
     o = o or {}
 
     if not o.slot and o.parent then
-        error ('Required parameter slot or parent is missing')
+        error ("Required parameter slot or parent is missing")
     end
 
     o.decorations = {}
@@ -65,68 +66,41 @@ function Asset:getConfig()
     return self.parent:getConfig()
 end
 
--- function Asset:registerDecoration(assetDecorationId, assetDecorationSlot, options)
---     local decorationType = assetDecorationSlot.type
+function Asset:registerDecoration(slot)
+    if self.decorations[slot.decorationId] then
+        error("Slot already has decoration")
+    end
 
---     if not self.decorations[decorationType] then
---         self.decorations[decorationType] = {}
---     end
-
---     if self.decorations[decorationType][assetDecorationId] then
---         error('Decoration slot ' .. assetDecorationId .. ' is occupied')
---     end
-
---     local decoration = AssetDecoration:new{slot = assetDecorationSlot, parent = self, options = options}
---     self.decorations[decorationType][assetDecorationId] = decoration
+    local decoration = Decoration:new{slot = slot, parent = self}
+    self.decorations[slot.decorationId] = decoration
     
---     return decoration
--- end
+    return decoration
+end
 
--- function Asset:hasDecoration(assetDecorationId, decorationType)
---     return self:getDecoration(assetDecorationId, decorationType) ~= nil
--- end
+function Asset:hasDecoration(decorationId)
+    return self:getDecoration(decorationId) ~= nil
+end
 
--- function Asset:getDecoration(assetDecorationId, decorationType)
---     decorationType = decorationType or t.ASSET_DECORATION
---     return self.decorations[decorationType] and self.decorations[decorationType][assetDecorationId]
--- end
+function Asset:getDecoration(decorationId)
+    return self.decorations[decorationId]
+end
 
--- function Asset:addDecorationSlot(slotCollection, assetDecorationId, options)
---     if not slotCollection then
---         error('slot collection parameter is required (normally result.slots)')
---     end
---     if not assetDecorationId then
---         error('asset id parameter is required')
---     end
+function Asset:addDecorationSlot(result, decorationId, slotType, transformation, spacing, shape)
+    local decorationSlotId = Slot.makeId({
+        type = t.DECORATION,
+        gridX = self:getGridX(),
+        gridY = self:getGridY(),
+        assetId = self:getId(),
+        decorationId = decorationId
+    })
 
---     options = options or {}
---     local assetDecorationSlotId = Slot.makeId({
---         type = options.assetDecorationType or t.ASSET_DECORATION,
---         gridX = self:getGridX(),
---         gridY = self:getGridY(),
---         assetId = self:getId(),
---         assetDecorationId = assetDecorationId
---     })
-
---     local parent = self:getParentGridElement()
---     local position = options.position or {parent:getAbsoluteX(), parent:getAbsoluteY(), parent:getAbsoluteZ() + 2}
-
---     local transformation = options.transformation or {
---         1, 0, 0, 0,
---         0, 1, 0, 0,
---         0, 0, 1, 0,
---         0, 0, 0, 1
---     }
-
---     transformation = Transf.mul(transformation, Transf.rotZTransl(math.rad(options.rotation or 0), {x = position[1], y = position[2], z = position[3]}))
-
---     table.insert(slotCollection, {
---         id = assetDecorationSlotId,
---         transf = transformation,
---         type = options.slotType or self:getGrid():getModulePrefix() .. '_asset_decoration',
---         spacing = options.spacing or c.DEFAULT_ASSET_SLOT_SPACING,
---         shape = options.shape or 0
---     })
--- end
+    table.insert(result.slots, {
+        id = decorationSlotId,
+        transf = transformation,
+        type = slotType,
+        spacing = spacing or self:getConfig().defaultAssetSlotSpacing,
+        shape = shape or 0
+    })
+end
 
 return Asset

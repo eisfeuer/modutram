@@ -130,8 +130,12 @@ function Slot:debug()
         print('Y Position (in cm): ' .. self.yPos)
     else
         print('Asset Id: ' .. self.assetId)
-        print('Asset Decoration Id: ' .. self.assetDecorationId)
+        print('Decoration Id: ' .. self.decorationId)
     end
+end
+
+function Slot.getTypeFromId(slotId)
+    return NatBomb.explode({25}, slotId)[1]
 end
 
 return Slot
