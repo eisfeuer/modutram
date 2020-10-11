@@ -35,7 +35,7 @@ describe("ThemeRepository", function ()
         repo:addModule("default_bus_stop_sign.module", {
             metadata = {
                 modutram = {
-                    themes = { "default" },
+                    theme = "default",
                     themeType = "bus_stop_sign"
                 }
             }, 
@@ -58,9 +58,10 @@ describe("ThemeRepository", function ()
         repo:addModule("hha_shelter.module", {
             metadata = {
                 modutram_themes = { "hha" },
-                modutram_themeType = "shelter",
+                modutram_themeTypes = {"shelter", "shelter_large"},
                 modutram_themeExtends = "hamburg",
-                modutram_widthInCm = 400
+                modutram_widthInCm = 400,
+                modutram_themeExcludes = { "bus_stop_sign" }
             },
             availability = {
                 yearFrom = 2003
@@ -89,18 +90,21 @@ describe("ThemeRepository", function ()
                 shelter = {
                     moduleName = "default_shelter.module",
                     widthInCm = 300
-                }
+                },
+                metadata = {}
             }, {
                 bus_stop_sign = {
                     moduleName = "hamburg_bus_stop_sign.module"
                 },
                 shelter = {
                     moduleName = "shelter_modern.module"
-                }
+                },
+                metadata = {}
             }, {
                 shelter = {
                     moduleName = "shelter_modern.module"
-                }
+                },
+                metadata = {}
             }, {
                 bus_stop_sign = {
                     moduleName = "hamburg_bus_stop_sign.module"
@@ -108,6 +112,13 @@ describe("ThemeRepository", function ()
                 shelter = {
                     moduleName = "hha_shelter.module",
                     widthInCm = 400
+                }, 
+                shelter_large = {
+                    moduleName = "hha_shelter.module",
+                    widthInCm = 400
+                }, 
+                metadata = {
+                    excludes = { "bus_stop_sign" }
                 }
             }
         }, repo:getRepositoryTable())

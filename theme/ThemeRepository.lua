@@ -9,32 +9,58 @@ function ThemeRepository:new(o)
     o.years = {}
     o.extends = {}
     o.translations = {}
+    o.excludes = {}
 
     setmetatable(o, self)
     self.__index = self
     return o
 end
 
-function ThemeRepository:addModule(moduleName, conModule)
-    local themes = self:getModuleMetadataParam(conModule, "themes")
+function ThemeRepository:getThemes(conModule)
+    local theme = self:getModuleMetadataParam(conModule, "theme")
+    if theme then
+        return { theme }
+    end
+
+    return self:getModuleMetadataParam(conModule, "themes")
+end
+
+function ThemeRepository:getThemeTypes(conModule)
     local themeType = self:getModuleMetadataParam(conModule, "themeType")
+    if themeType then
+        return { themeType }
+    end
+
+    return self:getModuleMetadataParam(conModule, "themeTypes")
+end
+
+function ThemeRepository:addModule(moduleName, conModule)
+    local themes = self:getThemes(conModule)
+    local themeTypes = self:getThemeTypes(conModule)
     local widthInCm = self:getModuleMetadataParam(conModule, "widthInCm")
     local yearFrom = optional(conModule.availability).yearFrom or 0
     local extends = self:getModuleMetadataParam(conModule, "themeExtends")
     local translations = self:getModuleMetadataParam(conModule, "themeTranslations") or {}
+    local excludes = self:getModuleMetadataParam(conModule, "themeExcludes")
     
-    if not (themes and themeType) then
+    if not (themes and themeTypes) then
         return
     end
 
     for _, theme in pairs(themes) do
-        self:addTheme(theme, themeType, moduleName, widthInCm)
-        self:addYear(theme, yearFrom)
-        if extends then
-            self.extends[theme] = extends
+        if excludes then
+            self.excludes[theme] = excludes
         end
-        for themeName, translation in pairs(translations) do
-            self.translations[themeName] = translation
+
+        for _, themeType in pairs(themeTypes) do
+            self:addTheme(theme, themeType, moduleName, widthInCm)
+            self:addYear(theme, yearFrom)
+            if extends then
+                self.extends[theme] = extends
+            end
+            for themeName, translation in pairs(translations) do
+                self.translations[themeName] = translation
+            end
         end
     end
 end
@@ -58,7 +84,15 @@ function ThemeRepository:getRepositoryTable()
     local repository = {}
 
     for _, theme in pairs(self:getThemeSort()) do
-        table.insert(repository, self:extendTheme(theme.theme))
+        local themeClone = self:extendTheme(theme.theme)
+
+        local metadata = {}
+        if self.excludes[theme.theme] then
+            metadata.excludes = self.excludes[theme.theme]
+        end
+        themeClone.metadata = metadata
+
+        table.insert(repository, themeClone)
     end
 
     return repository

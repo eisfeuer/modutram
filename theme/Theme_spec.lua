@@ -7,6 +7,9 @@ describe("Theme", function ()
                 moduleName = "hamburg_platform_left.module",
                 widthInCm = 300
             },
+            metadata = {
+                excludes = { "shelter" }
+            }
         },
         defaultTheme = {
             platformLeft = {
@@ -16,7 +19,11 @@ describe("Theme", function ()
             platformRight = {
                 moduleName = "platform_right.module",
                 widthInCm = 200
-            }
+            },
+            shelter = {
+                moduleName = "shelter.module",
+            },
+            metadata = {}
         }
     }
 
@@ -37,6 +44,17 @@ describe("Theme", function ()
 
         it ("returns default theme width in cm", function ()
             assert.are.equal(200, theme:getWidthInCm("platformRight"))
+        end)
+    end)
+
+    describe("has", function ()
+        it ("checks whether there is a module for given theme type", function ()
+            assert.is_true(theme:has("platformLeft"))
+            assert.is_false(theme:has("platformIsland"))
+        end)
+
+        it ("returns false when given theme type is excluded", function ()
+            assert.is_false(theme:has("shelter"))
         end)
     end)
 end)
