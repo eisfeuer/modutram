@@ -92,6 +92,7 @@ function ThemeRepository:getConstructionParams()
                 defaultIndex = 0,
                 yearFrom = yearFrom,
                 yearTo = yearTo,
+                tooltip = self.tooltip
             })
         end
     end

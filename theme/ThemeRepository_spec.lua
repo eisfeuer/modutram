@@ -1,7 +1,7 @@
 local ThemeRepository = require("modutram.theme.ThemeRepository")
 
 describe("ThemeRepository", function ()
-    local repo = ThemeRepository:new{defaultTheme = "default", paramName = "Theme"}
+    local repo = ThemeRepository:new{defaultTheme = "default", paramName = "Theme", tooltip = "tooltip"}
 
     describe("addModule",function ()
         repo:addModule("hamburg_bus_stop_sign.module", {
@@ -123,6 +123,7 @@ describe("ThemeRepository", function ()
                 defaultIndex = 0,
                 yearFrom = 1902,
                 yearTo = 2001,
+                tooltip = "tooltip"
             }, {
                 key = "modutram_theme",
                 name = "Theme",
@@ -131,6 +132,7 @@ describe("ThemeRepository", function ()
                 defaultIndex = 0,
                 yearFrom = 2001,
                 yearTo = 2003,
+                tooltip = "tooltip"
             }, {
                 key = "modutram_theme",
                 name = "Theme",
@@ -139,6 +141,7 @@ describe("ThemeRepository", function ()
                 defaultIndex = 0,
                 yearFrom = 2003,
                 yearTo = 0,
+                tooltip = "tooltip"
             }
         }, repo:getConstructionParams())
     end)

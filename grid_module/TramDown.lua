@@ -4,7 +4,7 @@ local Tram = require('modutram.grid_module.Tram')
 local TramDownClass = {}
 
 function TramDownClass:new(Tram)
-    TramDown = Tram
+    local TramDown = Tram
     TramDown.class = 'TramDown'
 
     return TramDown

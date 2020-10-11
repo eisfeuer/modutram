@@ -1,5 +1,6 @@
 local getIndexOrAddNewTable = require("modutram.helper.getIndexOrAddNewTable")
 local optional = require("modutram.helper.optional")
+local t = require("modutram.types")
 
 -- @module modutram.slot.SlotConfigRepository
 
@@ -59,7 +60,9 @@ function SlotConfigRepository.makeWithParams(paramsFromModLua)
     local slotConfigRepository = SlotConfigRepository:new{}
 
     for _, slotConfig in pairs(paramsFromModLua) do
-        slotConfigRepository:add(slotConfig)
+        if slotConfig.type < t.ASSET then
+            slotConfigRepository:add(slotConfig)
+        end
     end
 
     return slotConfigRepository

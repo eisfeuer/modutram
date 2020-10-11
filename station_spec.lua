@@ -126,6 +126,29 @@ describe('Station', function ()
             assert.are.equal(result, station.grid:get(1,2))
             assert.are.equal('TramUp', result.class)
         end)
+
+        it ('gets asset module', function ()
+            local station = Station:new{}
+
+            station:registerModule(Slot.makeId({type = t.TRAM_UP, gridX = 1, gridY = 2}))
+            local slotId = Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 3})
+
+            local result = station:getModule(slotId)
+
+            assert.are.equal(result, station.grid:get(1,2):getAsset(3))
+        end)
+
+        it ('gets decoration module', function ()
+            local station = Station:new{}
+
+            station:registerModule(Slot.makeId({type = t.TRAM_UP, gridX = 1, gridY = 2}))
+            station:registerModule(Slot.makeId({type = t.ASSET, gridX = 1, gridY = 2, assetId = 3}))
+            local slotId = Slot.makeId({type = t.DECORATION, gridX = 1, gridY = 2, assetId = 3, decorationId = 4})
+
+            local result = station:getModule(slotId)
+
+            assert.are.equal(result, station.grid:get(1,2):getAsset(3):getDecoration(4))
+        end)
     end)
 
     describe('getModuleAt', function ()

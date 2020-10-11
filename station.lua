@@ -46,6 +46,7 @@ function Station:bindToResult(result)
     result.terminateConstructionHook = function ()
         local terminalHandler = TerminalHandler:new{}
         terminalHandler:addTerminalsFromGrid(self.grid, result, self.edgeListMap)
+        terminalHandler:addNonTerminalLanesFromGrid(self.grid)
     end
 end
 
@@ -111,7 +112,19 @@ end
 function Station:getModule(slotId)
     local slot = Slot:new({id = slotId})
 
-    return self.grid:get(slot.gridX, slot.gridY)
+    local gridModule = self.grid:get(slot.gridX, slot.gridY)
+
+    if slot:isAssetModule() then
+        local asset = gridModule:getAsset(slot.assetId)
+
+        if slot.type == t.DECORATION then
+            return asset:getDecoration(slot.decorationId)
+        end
+
+        return asset
+    end
+
+    return gridModule
 end
 
 function Station:getModuleAt(gridX, gridY)
