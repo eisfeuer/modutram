@@ -36,7 +36,7 @@ end
 
 function SlotFactory:makeSpacing(widthInCm)
     local widthInMeters = self:convertToMeters(widthInCm)
-    return {widthInMeters / 2, widthInMeters / 2, self.config.gridModuleLength / 2, self.config.gridModuleLength / 2}
+    return {widthInMeters / 2 - 0.1, widthInMeters / 2 - 0.1, self.config.gridModuleLength / 2 - 0.1, self.config.gridModuleLength / 2 - 0.1}
 end
 
 function SlotFactory:make(slotConfig, gridX, gridY, xPos)

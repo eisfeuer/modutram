@@ -28,7 +28,7 @@ describe("SlotFactory", function ()
                     1.8, 2 * config.gridModuleLength, 0, 1,
                 },
                 spacing = {
-                    1.5, 1.5, config.gridModuleLength / 2, config.gridModuleLength / 2
+                    1.5 - 0.1, 1.5 - 0.1, config.gridModuleLength / 2 - 0.1, config.gridModuleLength / 2 - 0.1
                 }
             }, slotFactory:make(slotConfig, 3, 2, 180))
         end)

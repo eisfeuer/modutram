@@ -127,7 +127,7 @@ function Slot:debug()
     print('Grid X: ' .. self.gridX)
     print('Grid Y: ' .. self.gridY)
     if self:isGridModule() then
-        print('Y Position (in cm): ' .. self.yPos)
+        print('X Position (in cm): ' .. self.xPos)
     else
         print('Asset Id: ' .. self.assetId)
         print('Decoration Id: ' .. self.decorationId)
