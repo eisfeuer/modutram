@@ -155,6 +155,8 @@ Modutram offers two function to handle lanes and terminals
 #### handleTerminals
 The `handleTerminals()` function will be called when you module is part of a terminal group. A terminal group include the module where a vehicle stops and all modules where passengers leaves the vehicle or are waiting for it.
 The `handleTerminals()` function has one parameter `terminalGroup`. Terminal Models MUST to be added via the `terminalGroup` model. Otherwise there won't be bind each other to a valid terminal group. 
+The `handleTerminals()` may be called twice (for each side). The game will crash when two same lane models are place. So be aware of it.
+You can check if terminals already placed eather with `hasTerminals()` or with `hasTerminalsLeft` and `hasTerminalsRight` 
 
 ##### Properties
 The `terminalGroup` has three properties:
@@ -244,7 +246,7 @@ metadata = {
 ```
 
 #### handleLanes()
-The `handleLanes()` function will be called in all grid modules which are not part of a terminal. These models will be added at the normal way by useing the addModelFn().
+The `handleLanes()` function will be called in all grid modules. These models will be added at the normal way by useing the addModelFn().
 
 ### Assets
 Assets are modules which are placable on grid modules. Assets are e.g. buildings, street connections, roofes or decoration stuff.
