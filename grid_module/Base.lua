@@ -175,22 +175,12 @@ function GridModuleBase:handleTerminals(terminalHandleFunc)
     self.terminalHandleFunc = terminalHandleFunc
 end
 
-function GridModuleBase:canCallLeftTerminalHandleFunc()
-    if self.hasTerminalsLeft then
-        return false
-    end
-
-    self.hasTerminalsLeft = true
-    return true
+function GridModuleBase:isTerminalLeft(terminalGroup)
+    return terminalGroup.platformDirection == 'left'
 end
 
-function GridModuleBase:canCallRightTerminalHandleFunc()
-    if self.hasTerminalsRight then
-        return false
-    end
-
-    self.hasTerminalsRight = true
-    return true
+function GridModuleBase:isTerminalRight(terminalGroup)
+    return terminalGroup.platformDirection == 'right'
 end
 
 function GridModuleBase:canCallTerminalHandleFunc(terminalGroup)
@@ -198,20 +188,27 @@ function GridModuleBase:canCallTerminalHandleFunc(terminalGroup)
         return false
     end
 
-    if terminalGroup.platformDirection == 'left' then
-        return self:canCallLeftTerminalHandleFunc()
+    if self:isTerminalLeft(terminalGroup) then
+        return not self.hasTerminalsLeft
     end
-    if terminalGroup.platformDirection == 'right' then
-        return self:canCallRightTerminalHandleFunc()
+
+    if self:isTerminalRight(terminalGroup) then
+        return not self.hasTerminalsRight
     end
 
     return false
 end
 
 function GridModuleBase:callTerminalHandleFunc(terminalGroup)
-    self.hasTerminals = true
     if self:canCallTerminalHandleFunc(terminalGroup) then
         self.terminalHandleFunc(terminalGroup)
+
+        if self:isTerminalLeft(terminalGroup) then
+            self.hasTerminalsLeft = true
+        end
+        if self:isTerminalRight(terminalGroup) then
+            self.hasTerminalsRight = true
+        end
     end
 end
 

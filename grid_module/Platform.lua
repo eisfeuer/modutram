@@ -19,19 +19,12 @@ function PlatformClass:new(GridModule)
         return true
     end
 
-    function Platform:canCallTerminalHandleFunc(terminalGroup)
-        if not self.terminalHandleFunc then
-            return false
-        end
-        
-        if terminalGroup.trackDirection == 'left' then
-            return self:canCallLeftTerminalHandleFunc()
-        end
-        if terminalGroup.trackDirection == 'right' then
-            return self:canCallRightTerminalHandleFunc()
-        end
+    function Platform:isTerminalLeft(terminalGroup)
+        return terminalGroup.trackDirection == 'left'
+    end
     
-        return false
+    function Platform:isTerminalRight(terminalGroup)
+        return terminalGroup.trackDirection == 'right'
     end
 
     return Platform
