@@ -2,6 +2,108 @@
 Modular Tram Station Framework for Transport Fever 2
 THIS PROJECT AND THIS DOCUMENTATION ARE WIP
 
+## Themes
+Themes are sets of modules of parts of a station which the user can select. Themes can be added by mods.
+
+### Define a theme
+The definition of a theme is taking place in the modutram table in the metadata.
+Each module MUST have too values:
+__theme:__ name of the theme
+__themeType__: type of the thing which this module represents
+
+example:
+```
+metadata = {
+    modutram = {
+        theme = "hamburg",
+        themeType = "bench"
+    }
+}
+```
+
+### Multiple themes or themeTypes
+You can use a module for multiple theme or theme types.
+If you want to use a module for multiple themes use the `themes` key instead of `theme` and use an array with themes as value 
+If you want to use a module for multiple themeTypes use the `themeTypes` key instead of `themeType` and use an array with theme types as value
+
+### List of theme types
+These list contains all theme types which are used in the base modular tram station mod. Ohter mods may have different theme types.
+
+| Theme Type               | Module type | Description                                  |
+|:------------------------ |:-----------:|:-------------------------------------------- |
+| bench                    | Asset       | A single bench                               |
+| benches                  | Asset       | More than one bench                          |
+| fence                    | Asset       | Fence at the single platforms                |
+| lighting                 | Asset       | lamps on platforms                           |
+| billboard_small          | Asset       | small billboards on platforms                |
+| station_name_sign        | Asset       | station name sign                            |
+| shelter_small            | Asset       | small shelter                                |
+| shelter_medium           | Asset       | medium size shelter                          |
+| shelter_large            | Asset       | large shelter                                |
+| destination_display      | Asset       | destination display                          |
+| bus_station_sign         | Asset       | bus stop signs at the platforms ends         |
+| tram_bidirectional_left  | Grid Module | bidirectional tram lane (left hand traffic)  |
+| tram_bidirectional_right | Grid Module | bidirectional tram lane (right hand traffic) |
+| tram_up                  | Grid Module | oneway tram lane (to the top)                |
+| tram_down                | Grid Module | oneway tram lane (to the bottom)             |
+| platform_island_ramp     | Grid Module | island platform                              |
+| platform_left_ramp       | Grid Module | ramp for left platform                       |
+| platform_right_ramp      | Grid Module | ramp for right platform                      |
+| platform_right           | Grid Module | platform with tram stop on the right side    |
+| platform_island          | Grid Module | island platform                              |
+| platform_left            | Grid Module | platform with tram stop on the left side     |
+
+### Additional theme options
+Additional theme options are optional and only needs to be set in one module of the theme
+
+#### themeExtends
+When a module in the construction is missing in a theme the module will used from the default theme. You can define another theme where missing modules should be used.
+
+example:
+```
+metadata = {
+    modutram = {
+        theme = "hamburg_1950",
+        themeType = "bench",
+        extends = "hamburg"
+    }
+}
+```
+
+#### themeExcludes
+Excludes contains a list of theme types which should not be placed. The value is an array of themeTypes. This array MUST NOT contain grid module theme types.
+
+example:
+```
+metadata = {
+    modutram = {
+        theme = "hamburg_1850",
+        themeType = "bench",
+        themeExtends = "hamburg",
+        themeExcludes = { "destination_display" }
+    }
+}
+```
+
+#### themeTranslations
+The theme name will be displayed in the theme selection by default. To use another name (for translation) you can change it.
+The themeTranslations are a key value pairs with the theme name as key and the translation name as value 
+
+```
+metadata = {
+    modutram = {
+        themes = { "hamburg_1850", "hamburg_1900" },
+        themeType = "bench",
+        themeExtends = "hamburg",
+        themeExcludes = { "destination_display" },
+        themeTranslations = {
+            hamburg_1850 = _("Hamburg at 1850"),
+            hamburg_1900 = _("Hamburg at 1900")
+        }
+    }
+}
+```
+
 ## Build own module
 
 There are two main module types.  
