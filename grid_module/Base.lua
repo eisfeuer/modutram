@@ -30,7 +30,8 @@ function GridModuleBase:new(o)
         error('Grid Module MUST have a slot attribute')
     end
 
-    o.hasTerminals = false
+    o.hasTerminalsLeft = false
+    o.hasTerminalsRight = false
     o.class = 'Base'
     o.config = o.config or {}
     o.options = o.options or {}
@@ -174,11 +175,48 @@ function GridModuleBase:handleTerminals(terminalHandleFunc)
     self.terminalHandleFunc = terminalHandleFunc
 end
 
+function GridModuleBase:canCallLeftTerminalHandleFunc()
+    if self.hasTerminalsLeft then
+        return false
+    end
+
+    self.hasTerminalsLeft = true
+    return true
+end
+
+function GridModuleBase:canCallRightTerminalHandleFunc()
+    if self.hasTerminalsRight then
+        return false
+    end
+
+    self.hasTerminalsRight = true
+    return true
+end
+
+function GridModuleBase:canCallTerminalHandleFunc(terminalGroup)
+    if not self.terminalHandleFunc then
+        return false
+    end
+
+    if terminalGroup.platformDirection == 'left' then
+        return self:canCallLeftTerminalHandleFunc()
+    end
+    if terminalGroup.platformDirection == 'right' then
+        return self:canCallRightTerminalHandleFunc()
+    end
+
+    return false
+end
+
 function GridModuleBase:callTerminalHandleFunc(terminalGroup)
     self.hasTerminals = true
-    if self.terminalHandleFunc then
+    if self:canCallTerminalHandleFunc(terminalGroup) then
         self.terminalHandleFunc(terminalGroup)
     end
+end
+
+function GridModuleBase:hasTerminals()
+    return self.hasTerminalsLeft or self.hasTerminalsRight
 end
 
 function GridModuleBase:handleLanes(laneHandleFunc)
@@ -187,7 +225,7 @@ end
 
 function GridModuleBase:callLaneHandleFunc()
     if self.laneHandleFunc then
-        self.laneHandleFunc()
+        self.laneHandleFunc(self.hasTerminalsLeft, self.hasTerminalsRight)
     end
 end
 

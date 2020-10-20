@@ -236,7 +236,7 @@ describe("TerminalHandler", function ()
             terminalHandler:addTerminalsFromGrid(station.grid, result)
             terminalHandler:addNonTerminalLanesFromGrid(station.grid)
 
-            assert.are.same({1}, testResult)
+            assert.are.same({1, 2, 3}, testResult)
         end)
     end)
 end)

@@ -3,6 +3,7 @@ local t = require("modutram.types")
 local Station = require("modutram.Station")
 
 local GridModule = require("modutram.grid_module.Base")
+local TerminalGroup = require("modutram.terminal.TerminalGroup")
 
 describe("GridModule", function()
     local slotId = Slot.makeId({
@@ -217,17 +218,38 @@ describe("GridModule", function()
             local slot = Slot:new{id = Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0})}
             local testGridModule = GridModule:new{slot = slot}
 
-            assert.is_false(testGridModule.hasTerminals)
+            assert.is_false(testGridModule.hasTerminalsLeft)
+            assert.is_false(testGridModule.hasTerminalsRight)
             local called = false
 
             testGridModule:handleTerminals(function ()
                 called = true
             end)
 
-            testGridModule:callTerminalHandleFunc()
+            testGridModule:callTerminalHandleFunc(TerminalGroup:new{platformDirection = 'left'})
 
             assert.is_true(called)
-            assert.is_true(testGridModule.hasTerminals)
+            assert.is_true(testGridModule.hasTerminalsLeft)
+            assert.is_false(testGridModule.hasTerminalsRight)
+        end)
+
+        it('handles terminals on bidirectional tracks', function ()
+            local slot = Slot:new{id = Slot.makeId({type = t.TRAM_BIDIRECTIONAL_RIGHT, gridX = 0, gridY = 0})}
+            local testGridModule = GridModule:new{slot = slot}
+
+            assert.is_false(testGridModule.hasTerminalsLeft)
+            assert.is_false(testGridModule.hasTerminalsRight)
+            local called = false
+
+            testGridModule:handleTerminals(function ()
+                called = true
+            end)
+
+            testGridModule:callTerminalHandleFunc(TerminalGroup:new{platformDirection = 'left'})
+
+            assert.is_true(called)
+            assert.is_true(testGridModule.hasTerminalsLeft)
+            assert.is_false(testGridModule.hasTerminalsRight)
         end)
     end)
 
@@ -238,13 +260,48 @@ describe("GridModule", function()
 
             local called = false
 
-            testGridModule:handleLanes(function ()
+            testGridModule:handleLanes(function (hasTerminalsLeft, hasTerminalsRight)
+                assert.is_false(hasTerminalsLeft)
+                assert.is_false(hasTerminalsRight)
                 called = true
             end)
 
             testGridModule:callLaneHandleFunc()
 
             assert.is_true(called)
+        end)
+
+        it('handles non terminal lanes from a module with terminals', function ()
+            local slot = Slot:new{id = Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0})}
+            local testGridModule = GridModule:new{slot = slot}
+            testGridModule.hasTerminalsLeft = true
+
+            local called = false
+
+            testGridModule:handleLanes(function (hasTerminalsLeft, hasTerminalsRight)
+                assert.is_true(hasTerminalsLeft)
+                assert.is_false(hasTerminalsRight)
+                called = true
+            end)
+
+            testGridModule:callLaneHandleFunc()
+
+            assert.is_true(called)
+        end)
+    end)
+
+    describe("hasTerminals", function ()
+        it ("checks whether gridmodule has any terminals", function ()
+            local slot = Slot:new{id = Slot.makeId({type = t.TRAM_UP, gridX = 0, gridY = 0})}
+            local testGridModule1 = GridModule:new{slot = slot}
+            testGridModule1.hasTerminalsLeft = true
+            local testGridModule2 = GridModule:new{slot = slot}
+            testGridModule2.hasTerminalsRight = true
+            local testGridModule3 = GridModule:new{slot = slot}
+
+            assert.is_true(testGridModule1:hasTerminals())
+            assert.is_true(testGridModule2:hasTerminals())
+            assert.is_false(testGridModule3:hasTerminals())
         end)
     end)
 
