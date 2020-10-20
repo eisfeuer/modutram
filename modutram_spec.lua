@@ -1,6 +1,7 @@
 local Modutram = require('modutram.modutram')
 local Slot = require('modutram.slot.Slot')
 local t = require('modutram.types')
+local defaults = require("modutram.config.defaults")
 
 describe('modutram', function ()
     describe('initialize', function ()
@@ -55,7 +56,7 @@ describe('modutram', function ()
             assert.are.equal('TramUp', result.modutram.grid:get(-1,3).class)
 
             assert.are.same({{
-                id = 'asset/icon/marker_question.mdl',
+                id = defaults.emptyModel,
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }
             }}, result.models)
         end)

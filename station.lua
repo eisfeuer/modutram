@@ -36,14 +36,19 @@ function Station:bindToResult(result)
 
     self.edgeListMap = EdgeListMap:new{edgeLists = result.edgeLists}
 
-    if #result.models == 0 then
-        table.insert(result.models, {
-            id = 'asset/icon/marker_question.mdl',
-            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }
-        })
-    end
+    table.insert(result.models, {
+        id = self.config.emptyModel,
+        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }
+    })
 
     result.terminateConstructionHook = function ()
+        if #result.models == 1 then -- model set only contains the empty model
+            table.insert(result.models, {
+                id = 'asset/icon/marker_question.mdl',
+                transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }
+            })
+        end
+
         local terminalHandler = TerminalHandler:new{}
         terminalHandler:addTerminalsFromGrid(self.grid, result, self.edgeListMap)
         terminalHandler:addNonTerminalLanesFromGrid(self.grid)

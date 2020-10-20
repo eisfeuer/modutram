@@ -1,6 +1,7 @@
 local Station = require('modutram.Station')
 local Slot = require('modutram.slot.Slot')
 local t = require('modutram.types')
+local defaults = require("modutram.config.defaults")
 
 describe('Station', function ()
     describe('bindToResults', function ()
@@ -12,7 +13,7 @@ describe('Station', function ()
             station:bindToResult(result)
 
             assert.are.same({{
-                id = 'asset/icon/marker_question.mdl',
+                id = defaults.emptyModel,
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }
             }}, result.models)
         end)
