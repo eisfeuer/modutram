@@ -90,6 +90,11 @@ describe('TerminalGroupHandler', function ()
             }, {
                 terminals = {{4, 0}, {3, 0}}
             }}, result.terminalGroups)
+
+            assert.are.same({{
+                    tag = 1,
+                    terminals = {0, 1}
+            }}, result.stations)
         end)
 
         it ('ignores disabled modules', function ()
@@ -178,6 +183,11 @@ describe('TerminalGroupHandler', function ()
             }, {
                 terminals = {{4, 0}, {3, 0}}
             }}, result.terminalGroups)
+
+            assert.are.same({{
+                    tag = 1,
+                    terminals = {0, 1}
+            }}, result.stations)
         end)
 
         it ('setparates cargo and passenger modules', function ()
@@ -273,6 +283,14 @@ describe('TerminalGroupHandler', function ()
             }, {
                 terminals = {{5, 0}, {3, 0},{4, 0}}
             }}, result.terminalGroups)
+
+            assert.are.same({{
+                    tag = 1,
+                    terminals = {0}
+                }, {
+                    tag = 0,
+                    terminals = {1}
+            }}, result.stations)
         end)
     end)
 end)

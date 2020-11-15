@@ -204,6 +204,12 @@ describe("TerminalHandler", function ()
                     }, {
                         terminals = {{19, 0}, {13, 0}, {15, 0}, {17, 0}}
                     }
+                },
+                stations = {
+                    {
+                        tag = 1,
+                        terminals = {0, 1, 2, 3, 4}
+                    }
                 }
             }, result)
         end)

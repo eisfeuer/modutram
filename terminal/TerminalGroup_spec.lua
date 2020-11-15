@@ -220,6 +220,43 @@ describe("TerminalGroup", function ()
             assert.are.same({{
                 terminals = {{0,0}, {1,0}}
             }}, result.terminalGroups)
+
+            assert.are.same({{
+                tag = 1,
+                terminals = {0}
+            }}, result.stations)
+        end)
+
+        it ('adds passenger and freight terminal', function ()
+            local result = {models = {}}
+
+            local passengerTerminalGroup = TerminalGroup:new{result = result, edgeListMap = EdgeListMap:new{edgeLists = {}}}
+
+            passengerTerminalGroup:addVehicleTerminalModel("terminal_model.mdl", {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2, 1})
+            passengerTerminalGroup:addTerminalModel("terminal_model.mdl", {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2, 1})
+
+            passengerTerminalGroup:addToResult()
+
+            local freightTerminalGroup = TerminalGroup:new{result = result, edgeListMap = EdgeListMap:new{edgeLists = {}}, load = "cargo"}
+
+            freightTerminalGroup:addVehicleTerminalModel("terminal_model.mdl", {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2, 1})
+            freightTerminalGroup:addTerminalModel("terminal_model.mdl", {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2, 1})
+
+            freightTerminalGroup:addToResult()
+
+            assert.are.same({{
+                terminals = {{0,0}, {1,0}}
+            }, {
+                terminals = {{2,0}, {3,0}}
+            }}, result.terminalGroups)
+
+            assert.are.same({{
+                tag = 1,
+                terminals = {0}
+            }, {
+                tag = 0,
+                terminals = {1}
+            }}, result.stations)
         end)
     end)
 

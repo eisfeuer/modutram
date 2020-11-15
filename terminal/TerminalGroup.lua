@@ -84,6 +84,36 @@ function TerminalGroup:isValid()
     return false
 end
 
+function TerminalGroup:findStation(stationTag)
+    for _, station in pairs(self.result.stations) do
+        if station.tag == stationTag then
+            return station
+        end
+    end
+
+    return nil
+end
+
+function TerminalGroup:addTerminalToStation(terminalGroupId)
+    local stationTag = self.load == "cargo" and 0 or 1
+
+    if not self.result.stations then
+        self.result.stations = {}
+    end
+
+    local station = self:findStation(stationTag)
+
+    if not station then
+        station = {
+            tag = stationTag,
+            terminals = {}
+        }
+        table.insert(self.result.stations, station)
+    end
+
+    table.insert(station.terminals, terminalGroupId)
+end
+
 function TerminalGroup:addToResult()
     local resultTerminalGroup = {
         terminals = {}
@@ -104,6 +134,8 @@ function TerminalGroup:addToResult()
     if not self.result.terminalGroups then
         self.result.terminalGroups = {}
     end
+
+    self:addTerminalToStation(#self.result.terminalGroups)
 
     table.insert(self.result.terminalGroups, resultTerminalGroup)
 end
