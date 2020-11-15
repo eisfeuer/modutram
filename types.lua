@@ -8,8 +8,10 @@ return {
 
     BUS_BIDIRECTIONAL_LEFT = 16,
     BUS_BIDIRECTIONAL_RIGHT = 17,
-    BUS_UP = 18,
-    BUS_DOWN = 19,
+    BUS_UP_LEFT = 18,
+    BUS_UP_RIGHT = 19,
+    BUS_DOWN_LEFT = 20,
+    BUS_DOWN_RIGHT = 21,
 
     TRAIN = 24,
 
