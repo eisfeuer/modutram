@@ -274,6 +274,8 @@ params:
   modelTerminalId (optional, default = 0): Id of the terminal defined in the terminal model
 Return: position in the result.models (starting from 0)
 
+if you makes a cargo module you have to add `load = "cargo"` to the module modutram metadata.
+
 Example
 ```lua
 module:handleTerminals(function (terminalGroup)

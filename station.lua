@@ -42,7 +42,7 @@ function Station:bindToResult(result)
     })
 
     result.terminateConstructionHook = function ()
-        if #result.models == 1 then -- model set only contains the empty model
+        if #result.models == 1 and #result.edgeLists == 0 then -- model set only contains the empty model
             table.insert(result.models, {
                 id = 'asset/icon/marker_question.mdl',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }

@@ -21,9 +21,9 @@ function TerminalGroupHandler:handle(gridModule)
         return
     end
 
-    if neighbor.class ~= self.trackClass then
+    if neighbor.class ~= self.trackClass or self:hasDifferentLoadType(gridModule) then
         self:finalizeTerminalGroup()
-        self:initializeTerminalGroup(neighbor)
+        self:initializeTerminalGroup(neighbor, gridModule)
     end
 
     self.endPos = gridModule:getGridY()
@@ -31,6 +31,10 @@ function TerminalGroupHandler:handle(gridModule)
     if neighbor:isBus() then
         self:finalizeTerminalGroup()
     end
+end
+
+function TerminalGroupHandler:hasDifferentLoadType(gridModule)
+    return self.terminalGroup and self.terminalGroup.load ~= gridModule:getOption('load', 'passengers')
 end
 
 function TerminalGroupHandler:gridModuleIsValidPlatform(gridModule)
@@ -53,14 +57,15 @@ function TerminalGroupHandler:gridModuleIsValidPlatform(gridModule)
     return gridModule.class == 'PlatformRight'
 end
 
-function TerminalGroupHandler:initializeTerminalGroup(trackGridModule)
+function TerminalGroupHandler:initializeTerminalGroup(trackGridModule, platformGridModule)
     local oppositeDirection = self.neighborDirection == 'left' and 'right' or 'left'
 
     self.terminalGroup = TerminalGroup:new{
         result = self.result,
         edgeListMap = self.edgeListMap,
         trackDirection = self.neighborDirection,
-        platformDirection = oppositeDirection
+        platformDirection = oppositeDirection,
+        load = platformGridModule:getOption('load', 'passengers')
     }
 
     self.trackClass = trackGridModule.class
