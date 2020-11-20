@@ -1,4 +1,5 @@
 local optional = require("modutram.helper.optional")
+local clone = require("modutram.helper.clone")
 
 local ThemeRepository = {}
 
@@ -38,10 +39,14 @@ function ThemeRepository:addModule(moduleName, conModule)
     local themes = self:getThemes(conModule)
     local themeTypes = self:getThemeTypes(conModule)
     local widthInCm = self:getModuleMetadataParam(conModule, "widthInCm")
-    local yearFrom = optional(conModule.availability).yearFrom or 0
+    local yearFrom = optional(conModule.availability).yearFrom or 1850
     local extends = self:getModuleMetadataParam(conModule, "themeExtends")
     local translations = self:getModuleMetadataParam(conModule, "themeTranslations") or {}
     local excludes = self:getModuleMetadataParam(conModule, "themeExcludes")
+
+    if yearFrom == 0 then
+        yearFrom = 1850
+    end
     
     if not (themes and themeTypes) then
         return
@@ -49,7 +54,7 @@ function ThemeRepository:addModule(moduleName, conModule)
 
     for _, theme in pairs(themes) do
         if excludes then
-            self.excludes[theme] = excludes
+            self.excludes[theme] = clone(excludes)
         end
 
         for _, themeType in pairs(themeTypes) do

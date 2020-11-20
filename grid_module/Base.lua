@@ -255,6 +255,22 @@ function GridModuleBase:getAsset(assetId)
     return self.assets[assetId]
 end
 
+function GridModuleBase:isBidirectionalLeftTrack()
+    return string.match(self.class, "BidirectionalLeft$") ~= nil
+end
+
+function GridModuleBase:isBidirectionalRightTrack()
+    return string.match(self.class, "BidirectionalRight$") ~= nil
+end
+
+function GridModuleBase:isUpGoingTrack()
+    return string.match(self.class, "Up$") ~= nil or string.match(self.class, "UpLeft$") ~= nil or string.match(self.class, "UpRight$") ~= nil
+end
+
+function GridModuleBase:isDownGoingTrack()
+    return string.match(self.class, "Down$") ~= nil or string.match(self.class, "DownLeft$") ~= nil or string.match(self.class, "DownRight$") ~= nil
+end
+
 function GridModuleBase:addAssetSlot(result, assetSlotId, slotType, transformation, spacing, shape)
     local slotId = Slot.makeId({
         type = t.ASSET,

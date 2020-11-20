@@ -1,6 +1,6 @@
 local BusClass = {}
 
-function BusClass.new(GridModule)
+function BusClass:new(GridModule)
     local Bus = GridModule
     Bus.class = 'Bus'
 
