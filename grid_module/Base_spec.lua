@@ -470,4 +470,17 @@ describe("GridModule", function()
             assert.is_false(station.grid:get(5,0):isDownGoingTrack())
         end)
     end)
+
+    describe('getColumn', function ()
+        it('returns the column where this module belongs to', function ()
+            local station = Station:new()
+            local slotId2 = Slot.makeId({type = t.TRAM_UP, gridX = 2, gridY = 0})
+
+            station:registerModule(slotId2)
+
+            local gridModule2 = station:getModule(slotId2)
+
+            assert.are.equal(station.grid:getColumn(2), gridModule2:getColumn())
+        end)
+    end)
 end)

@@ -288,4 +288,8 @@ function GridModuleBase:addAssetSlot(result, assetSlotId, slotType, transformati
     })
 end
 
+function GridModuleBase:getColumn()
+    return self.grid:getColumn(self:getGridX())
+end
+
 return GridModuleBase
