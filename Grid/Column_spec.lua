@@ -185,4 +185,57 @@ describe('Column', function ()
 
         assert.are.same({-2, 'nil', 0, 1}, result)
     end)
+
+    describe('getGridLength', function ()
+        it ('returns total column length in grid units', function ()
+            local gridModule1 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = 1
+            })})}
+            local gridModule2 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = 0
+            })})}
+            local gridModule3 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = -2
+            })})}
+            local gridModule4 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = -5
+            })})}
+            local gridModule5 = GridModule:new{slot = Slot:new({id = Slot.makeId({
+                type = t.PLATFORM_LEFT,
+                gridX = 3,
+                gridY = 2
+            })})}
+
+            local column1 = Column:new{initialModule = gridModule1}
+            column1:addGridModule(gridModule3)
+            assert.are.equal(4, column1:getGridLength())
+
+            local column2 = Column:new{initialModule = gridModule5}
+            column2:addGridModule(gridModule1)
+            assert.are.equal(2, column2:getGridLength())
+
+            local column3 = Column:new{initialModule = gridModule3}
+            column3:addGridModule(gridModule4)
+            assert.are.equal(4, column3:getGridLength())
+
+            local column4 = Column:new{initialModule = gridModule2}
+            column4:addGridModule(gridModule3)
+            assert.are.equal(3, column4:getGridLength())
+
+            local column5 = Column:new{initialModule = gridModule2}
+            column5:addGridModule(gridModule5)
+            assert.are.equal(3, column5:getGridLength())
+            
+            local column6 = Column:new{initialModule = gridModule2}
+            assert.are.equal(1, column6:getGridLength())
+        end)
+    end)
 end)

@@ -56,4 +56,8 @@ function Column:eachWithEmpty(callable)
     end
 end
 
+function Column:getGridLength()
+    return self.topGridY - self.bottomGridY + 1
+end
+
 return Column
