@@ -57,14 +57,20 @@ end
 function SlotFactory:makeSlotsLeftFromGridModule(slotConfigRepository, gridModule)
     local slots = {}
 
-    for _, slotType in pairs(gridModule.possibleLeftNeighbors) do
-        for _, slotConfig in pairs(slotConfigRepository:get(slotType) or {}) do
-            table.insert(slots, self:make(
-                slotConfig,
-                gridModule:getGridX() - 1,
-                gridModule:getGridY(),
-                math.floor(gridModule:getXPosInCm() - ((gridModule:getOption("widthInCm", 0) + slotConfig.widthInCm ) / 2))
-            ))
+    if gridModule:getGridX() > -31 then
+        for _, slotType in pairs(gridModule.possibleLeftNeighbors) do
+            for _, slotConfig in pairs(slotConfigRepository:get(slotType) or {}) do
+                local xPos = math.floor(gridModule:getXPosInCm() - ((gridModule:getOption("widthInCm", 0) + slotConfig.widthInCm ) / 2))
+
+                if math.abs(xPos) <= 8000 then
+                    table.insert(slots, self:make(
+                        slotConfig,
+                        gridModule:getGridX() - 1,
+                        gridModule:getGridY(),
+                        xPos
+                    ))
+                end
+            end
         end
     end
 
@@ -74,14 +80,20 @@ end
 function SlotFactory:makeSlotsRightFromGridModule(slotConfigRepository, gridModule)
     local slots = {}
 
-    for _, slotType in pairs(gridModule.possibleRightNeighbors) do
-        for _, slotConfig in pairs(slotConfigRepository:get(slotType) or {}) do
-            table.insert(slots, self:make(
-                slotConfig,
-                gridModule:getGridX() + 1,
-                gridModule:getGridY(),
-                math.floor(gridModule:getXPosInCm() + ((gridModule:getOption("widthInCm", 0) + slotConfig.widthInCm ) / 2))
-            ))
+    if gridModule:getGridX() < 31 then
+        for _, slotType in pairs(gridModule.possibleRightNeighbors) do
+            for _, slotConfig in pairs(slotConfigRepository:get(slotType) or {}) do
+                local xPos = math.floor(gridModule:getXPosInCm() + ((gridModule:getOption("widthInCm", 0) + slotConfig.widthInCm ) / 2))
+
+                if math.abs(xPos) <= 8000 then
+                    table.insert(slots, self:make(
+                        slotConfig,
+                        gridModule:getGridX() + 1,
+                        gridModule:getGridY(),
+                        xPos
+                    ))
+                end
+            end
         end
     end
 
@@ -105,10 +117,18 @@ function SlotFactory:makeSlotAtGridModule(slotConfigRepository, gridModule, vert
 end
 
 function SlotFactory:makeSlotsAboveGridModule(slotConfigRepository, gridModule)
+    if gridModule:getGridY() >= 31 then
+        return {}
+    end
+
     return { self:makeSlotAtGridModule(slotConfigRepository, gridModule, 1) }
 end
 
 function SlotFactory:makeSlotsBelowGridModule(slotConfigRepository, gridModule)
+    if gridModule:getGridY() <= -31 then
+        return {}
+    end
+
     return { self:makeSlotAtGridModule(slotConfigRepository, gridModule, -1) }
 end
 

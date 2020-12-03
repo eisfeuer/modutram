@@ -100,9 +100,63 @@ describe("SlotFactory", function ()
 
             assert.are.same(expected, slotFactory:makeSlotsLeftFromGridModule(slotConfigRepo, gridModule))
         end)
+
+        it ("does not make slot with xPos > 8000cm", function ()
+            local slotConfigs = {{
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_300cm',
+                widthInCm = 300,
+                namespace = 'austria'
+            }, {
+                type = t.TRAIN,
+                slotType = 'modutram_austria_train_200cm',
+                widthInCm = 200,
+                namespace = 'austria'
+            }}
+
+            local gridModule = factory.make(Slot:new{id = Slot.makeId({
+                type = t.PLATFORM_RIGHT,
+                gridX = -4,
+                gridY = 3,
+                xPos = 7800
+            }), moduleData = { metadata =  { modutram_widthInCm = 200 } }})
+
+            local expected = {
+                slotFactory:make(slotConfigs[2], -5, 3, -8000),
+            }
+
+            local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
+
+            assert.are.same(expected, slotFactory:makeSlotsLeftFromGridModule(slotConfigRepo, gridModule))
+        end)
+
+        it ("does not make slots with gridX < -31", function ()
+            local slotConfigs = {{
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_300cm',
+                widthInCm = 300,
+                namespace = 'austria'
+            }, {
+                type = t.TRAIN,
+                slotType = 'modutram_austria_train_350cm',
+                widthInCm = 200,
+                namespace = 'austria'
+            }}
+
+            local gridModule = factory.make(Slot:new{id = Slot.makeId({
+                type = t.PLATFORM_RIGHT,
+                gridX = -31,
+                gridY = 3,
+                xPos = 500
+            }), moduleData = { metadata =  { modutram_widthInCm = 200 } }})
+
+            local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
+
+            assert.are.same({}, slotFactory:makeSlotsLeftFromGridModule(slotConfigRepo, gridModule))
+        end)
     end)
     
-    describe("makeSlotsFromGridModule", function ()
+    describe("makeSlotsRightFromGridModule", function ()
         it ("makes any slot right from grid module", function ()
             local slotConfigs = {{
                 type = t.TRAM_UP,
@@ -143,10 +197,64 @@ describe("SlotFactory", function ()
 
             assert.are.same(expected, slotFactory:makeSlotsRightFromGridModule(slotConfigRepo, gridModule))
         end)
+
+        it ("does not make slot with xPos > 8000cm", function ()
+            local slotConfigs = {{
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_300cm',
+                widthInCm = 300,
+                namespace = 'austria'
+            }, {
+                type = t.TRAIN,
+                slotType = 'modutram_austria_train_350cm',
+                widthInCm = 200,
+                namespace = 'austria'
+            }}
+
+            local gridModule = factory.make(Slot:new{id = Slot.makeId({
+                type = t.PLATFORM_RIGHT,
+                gridX = 4,
+                gridY = 3,
+                xPos = 7800
+            }), moduleData = { metadata =  { modutram_widthInCm = 200 } }})
+
+            local expected = {
+                slotFactory:make(slotConfigs[2], 5, 3, 8000),
+            }
+
+            local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
+
+            assert.are.same(expected, slotFactory:makeSlotsRightFromGridModule(slotConfigRepo, gridModule))
+        end)
+
+        it ("does not make slots with gridX > 31", function ()
+            local slotConfigs = {{
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_300cm',
+                widthInCm = 300,
+                namespace = 'austria'
+            }, {
+                type = t.TRAIN,
+                slotType = 'modutram_austria_train_350cm',
+                widthInCm = 200,
+                namespace = 'austria'
+            }}
+
+            local gridModule = factory.make(Slot:new{id = Slot.makeId({
+                type = t.PLATFORM_RIGHT,
+                gridX = 31,
+                gridY = 3,
+                xPos = 500
+            }), moduleData = { metadata =  { modutram_widthInCm = 200 } }})
+
+            local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
+
+            assert.are.same({}, slotFactory:makeSlotsRightFromGridModule(slotConfigRepo, gridModule))
+        end)
     end)
 
     describe("makeSlotsAboveGridModule", function ()
-        it ("makes a slot avove given grid module", function ()
+        it ("makes a slot above given grid module", function ()
             local slotConfigs = {{
                 type = t.TRAM_UP,
                 slotType = 'modutram_austria_tram_up_300cm',
@@ -179,6 +287,41 @@ describe("SlotFactory", function ()
             local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
 
             assert.are.same({slotFactory:make(slotConfigs[2], 2, 4, 350)}, slotFactory:makeSlotsAboveGridModule(slotConfigRepo, gridModule))
+        end)
+
+        it ("does not make slots with yPos > 31", function ()
+            local slotConfigs = {{
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_300cm',
+                widthInCm = 300,
+                namespace = 'austria'
+            }, {
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_350cm',
+                widthInCm = 350,
+                namespace = 'austria'
+            }, {
+                type = t.PLATFORM_ISLAND,
+                slotType = 'modutram_austria_platform_island_350cm',
+                widthInCm = 350,
+                namespace = 'austria'
+            }, {
+                type = t.TRAIN,
+                slotType = 'modutram_austria_train_350cm',
+                widthInCm = 200,
+                namespace = 'austria'
+            }}
+
+            local gridModule = factory.make(Slot:new{id = Slot.makeId({
+                type = t.TRAM_UP,
+                gridX = 2,
+                gridY = 31,
+                xPos = 350
+            }), moduleData = { metadata =  { modutram_widthInCm = 350 } }})
+
+            local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
+
+            assert.are.same({}, slotFactory:makeSlotsAboveGridModule(slotConfigRepo, gridModule))
         end)
     end)
 
@@ -216,6 +359,41 @@ describe("SlotFactory", function ()
             local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
 
             assert.are.same({slotFactory:make(slotConfigs[2], 2, 2, 350)}, slotFactory:makeSlotsBelowGridModule(slotConfigRepo, gridModule))
+        end)
+
+        it ("does not make slots with gridY < -31", function ()
+            local slotConfigs = {{
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_300cm',
+                widthInCm = 300,
+                namespace = 'austria'
+            }, {
+                type = t.TRAM_UP,
+                slotType = 'modutram_austria_tram_up_350cm',
+                widthInCm = 350,
+                namespace = 'austria'
+            }, {
+                type = t.PLATFORM_ISLAND,
+                slotType = 'modutram_austria_platform_island_350cm',
+                widthInCm = 350,
+                namespace = 'austria'
+            }, {
+                type = t.TRAIN,
+                slotType = 'modutram_austria_train_350cm',
+                widthInCm = 200,
+                namespace = 'austria'
+            }}
+
+            local gridModule = factory.make(Slot:new{id = Slot.makeId({
+                type = t.TRAM_UP,
+                gridX = 2,
+                gridY = -31,
+                xPos = 350
+            }), moduleData = { metadata =  { modutram_widthInCm = 350 } }})
+
+            local slotConfigRepo = SlotConfigRepository.makeWithParams(slotConfigs)
+
+            assert.are.same({}, slotFactory:makeSlotsBelowGridModule(slotConfigRepo, gridModule))
         end)
     end)
 

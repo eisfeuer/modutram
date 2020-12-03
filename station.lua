@@ -33,6 +33,7 @@ function Station:bindToResult(result)
     result.terrainAlignmentLists = result.terrainAlignmentLists or {}
     result.groundFaces = result.groundFaces or {}
     result.edgeLists = {}
+    result.colliders = {}
 
     self.edgeListMap = EdgeListMap:new{edgeLists = result.edgeLists}
 
