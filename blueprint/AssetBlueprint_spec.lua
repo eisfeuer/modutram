@@ -15,8 +15,8 @@ describe("AssetBlueprint", function ()
 
             assert.are.same({
                 [Slot.makeId({type = t.ASSET, gridX = 3, gridY = 5, assetId = 2})] = "shelter.module",
-                [Slot.makeId({type = t.ASSET, gridX = 3, gridY = 5, assetId = 2, decorationId = 3})] = "schedule.module",
-                [Slot.makeId({type = t.ASSET, gridX = 3, gridY = 5, assetId = 2, decorationId = 4})] = "clock.module"
+                [Slot.makeId({type = t.DECORATION, gridX = 3, gridY = 5, assetId = 2, decorationId = 3})] = "schedule.module",
+                [Slot.makeId({type = t.DECORATION, gridX = 3, gridY = 5, assetId = 2, decorationId = 4})] = "clock.module"
             }, result)
         end)
     end)

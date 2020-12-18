@@ -25,7 +25,7 @@ end
 function AssetBlueprint:place(result, gridX, gridY, assetId)
     result[Slot.makeId({type = t.ASSET, gridX = gridX, gridY = gridY, assetId = assetId})] = self.moduleName
     for decorationId, decorationModulName in pairs(self.decorations) do
-        result[Slot.makeId({type = t.ASSET, gridX = gridX, gridY = gridY, assetId = assetId, decorationId = decorationId})] = decorationModulName
+        result[Slot.makeId({type = t.DECORATION, gridX = gridX, gridY = gridY, assetId = assetId, decorationId = decorationId})] = decorationModulName
     end
 end
 
