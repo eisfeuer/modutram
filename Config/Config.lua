@@ -1,5 +1,5 @@
 local merge = require('modutram.helper.merge')
-local defaults = require('modutram.Config.defaults')
+local defaults = require('modutram.config.defaults')
 
 local Config = {}
 
