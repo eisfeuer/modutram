@@ -7,7 +7,7 @@ return function (result, gridModule)
         type = "BOX",
         transf = Transf.transl({x = gridModule:getAbsoluteX(), y = gridModule:getAbsoluteY(), z = 2}),
         params = {
-            halfExtents = {gridModule:getOption("widthInCm", 1) / 200, modutram.config.gridModuleLength / 2, 2},
+            halfExtents = {gridModule:getOption("widthInCm", 1) / 200 - 0.0001, modutram.config.gridModuleLength / 2 - 0.0001, 2},
         }
     })
 end
