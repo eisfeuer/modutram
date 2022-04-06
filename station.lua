@@ -17,6 +17,10 @@ function Station:new(o)
 
     o.config = Config:new(o.config)
     o.grid = Grid:new{config = o.config}
+    o.poolCapacity = {
+        cargo = 0,
+        passenger = 0
+    }
 
     setmetatable(o, self)
     self.__index = self
@@ -53,11 +57,24 @@ function Station:bindToResult(result)
         local terminalHandler = TerminalHandler:new{}
         terminalHandler:addTerminalsFromGrid(self.grid, result, self.edgeListMap)
         terminalHandler:addNonTerminalLanesFromGrid(self.grid)
+
+        for _, station in pairs(result.stations) do
+            if (station.tag == 0) then -- cargo
+                station.pool = { moreCapacity = self.poolCapacity.cargo }
+            end
+            if (station.tag == 1) then -- passengers
+                station.pool = { moreCapacity = self.poolCapacity.passenger }
+            end
+        end
     end
 end
 
 function Station:registerModule(slotId, moduleData)
     local slot = Slot:new({id = slotId, moduleData = moduleData})
+
+    local poolCapacity = slot:getOptions()['moreCapacity']
+    self.poolCapacity.cargo = self.poolCapacity.cargo + (optional(poolCapacity).cargo or 0)
+    self.poolCapacity.passenger = self.poolCapacity.passenger + (optional(poolCapacity).passenger or 0)
 
     if slot:isGridModule() then
         local gridModule = GridModuleFactory.make(slot, self.grid, self.config)

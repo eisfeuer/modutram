@@ -76,21 +76,33 @@ describe('Station', function ()
             [Slot.makeId({type = t.TRAM_UP, gridX = 1, gridY = 2})] = {
                 metadata = {
                     modutram = {
-                        trackGauge = 1435
+                        trackGauge = 1435,
+                        moreCapacity = {
+                            cargo = 10,
+                            passenger = 20
+                        }
                     },
                 }
             },
             [Slot.makeId({type = t.TRAM_UP, gridX = 3, gridY = 2})] = {
                 metadata = {
                     modutram = {
-                        trackGauge = 1000
+                        trackGauge = 1000,
+                        moreCapacity = {
+                            cargo = 10,
+                            passenger = 0
+                        }
                     },
                 }
             },
             [Slot.makeId({type = t.ASSET, gridX = -1, gridY = 3, assetId = 9})] = {
                 metadata = {
                     modutram = {
-                        height = 1500
+                        height = 1500,
+                        moreCapacity = {
+                            cargo = 30,
+                            passenger = 0
+                        }
                     },
                 }
             },
@@ -113,6 +125,8 @@ describe('Station', function ()
         assert.are.equal(1000, station.grid:get(3,2):getOption('trackGauge'))
         assert.are.equal('TramUp', station.grid:get(-1,3).class)
         assert.are.equal(1100, station.grid:get(-1,3):getOption('trackGauge'))
+        assert.are.equal(50, station.poolCapacity.cargo)
+        assert.are.equal(20, station.poolCapacity.passenger)
     end)
 
     describe('getModule', function ()
