@@ -46,6 +46,10 @@ function TerminalGroupHandler:gridModuleIsValidPlatform(gridModule)
         return false
     end
 
+    if self.neighborDirection == 'self' and gridModule:getOption('isZigzag', false) then
+        return true
+    end
+
     if gridModule.class == 'PlatformIsland' then
         return true
     end
@@ -54,17 +58,22 @@ function TerminalGroupHandler:gridModuleIsValidPlatform(gridModule)
         return gridModule.class == 'PlatformLeft' 
     end
 
-    return gridModule.class == 'PlatformRight'
+    if self.neighborDirection == 'right' then
+        return gridModule.class == 'PlatformRight'
+    end
+
+    return false
 end
 
 function TerminalGroupHandler:initializeTerminalGroup(trackGridModule, platformGridModule)
     local oppositeDirection = self.neighborDirection == 'left' and 'right' or 'left'
+    local isSelf = self.neighborDirection == 'self'
 
     self.terminalGroup = TerminalGroup:new{
         result = self.result,
         edgeListMap = self.edgeListMap,
-        trackDirection = self.neighborDirection,
-        platformDirection = oppositeDirection,
+        trackDirection = isSelf and 'self' or self.neighborDirection,
+        platformDirection = isSelf and 'self' or oppositeDirection,
         load = platformGridModule:getOption('load', 'passengers')
     }
 

@@ -213,6 +213,133 @@ describe("TerminalHandler", function ()
                 }
             }, result)
         end)
+
+        it ('handles zig zags', function ()
+            local zigzagModuleData = {
+                metadata = {
+                    modutram_widthInCm = 100,
+                    modutram_isZigzag = true
+                }
+            }
+
+            local result = {models = {}}
+            local terminalHandler = TerminalHandler:new{}
+
+            local station = Station:new{}
+
+            station:registerModule(Slot.makeId({type = t.PLATFORM_RIGHT, gridX = -2, gridY = 0, yPos = 400}), moduleData)
+            station:registerModule(Slot.makeId({type = t.PLATFORM_RIGHT, gridX = -2, gridY = 1, yPos = 400}), moduleData)
+
+            station:registerModule(Slot.makeId({type = t.TRAIN, gridX = -1, gridY = 0, yPos = 400}), moduleData)
+            station:registerModule(Slot.makeId({type = t.TRAIN, gridX = -1, gridY = 1, yPos = 400}), moduleData)
+
+            station:registerModule(Slot.makeId({type = t.TRAIN, gridX = 0, gridY = 0, yPos = 400}), zigzagModuleData)
+            station:registerModule(Slot.makeId({type = t.TRAIN, gridX = 0, gridY = 1, yPos = 400}), zigzagModuleData)
+
+            station:registerModule(Slot.makeId({type = t.TRAIN, gridX = 1, gridY = 0, yPos = 400}), moduleData)
+            station:registerModule(Slot.makeId({type = t.TRAIN, gridX = 1, gridY = 1, yPos = 400}), moduleData)
+
+            station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 2, gridY = 0, yPos = 400}), moduleData)
+            station:registerModule(Slot.makeId({type = t.PLATFORM_LEFT, gridX = 2, gridY = 1, yPos = 400}), moduleData)
+
+            local function doNotHandleThis(terminalGroup)
+                assert.is_true(false)
+            end
+            local function handleLeftTerminalsForPlatform(terminalGroup)
+                assert.are.equal('left', terminalGroup.trackDirection)
+
+                terminalGroup:addTerminalModel('cargo_terminal_left.mdl', identMatrix)
+            end
+            local function handleRightTerminalsForPlatform(terminalGroup)
+                assert.are.equal('right', terminalGroup.trackDirection)
+
+                terminalGroup:addTerminalModel('cargo_terminal_right.mdl', identMatrix)
+            end
+            local function handlePlatformOnTheRight(terminalGroup)
+                assert.are.equal('right', terminalGroup.platformDirection)
+                assert.are.equal('top', terminalGroup.vehicleStopAlignment)
+
+                terminalGroup:addVehicleTerminalModel('vehicle_terminal_top_right.mdl', identMatrix)
+            end
+            local function handlePlatformOnTheLeft(terminalGroup)
+                assert.are.equal('left', terminalGroup.platformDirection)
+                assert.are.equal('top', terminalGroup.vehicleStopAlignment)
+
+                terminalGroup:addVehicleTerminalModel('vehicle_terminal_top_left.mdl', identMatrix)
+            end
+            local function handleZigzag(terminalGroup)
+                assert.are.equal('self', terminalGroup.platformDirection)
+                assert.are.equal('self', terminalGroup.trackDirection)
+
+                if terminalGroup.vehicleStopAlignment then
+                    terminalGroup:addVehicleTerminalModel('vehicle_terminal_zigzag.mdl', identMatrix)
+                else
+                    terminalGroup:addTerminalModel('cargo_terminal_zigzag.mdl', identMatrix)
+                end
+            end
+
+            -- left track with platform
+            station.grid:get(-2, 0):handleTerminals(handleRightTerminalsForPlatform)
+            station.grid:get(-2, 1):handleTerminals(handleRightTerminalsForPlatform)
+            station.grid:get(-1, 0):handleTerminals(handlePlatformOnTheLeft)
+            station.grid:get(-1, 1):handleTerminals(doNotHandleThis)
+            -- zig zag
+            station.grid:get(0, 0):handleTerminals(handleZigzag)
+            station.grid:get(0, 1):handleTerminals(handleZigzag)
+            -- right track with
+            station.grid:get(1, 0):handleTerminals(handlePlatformOnTheRight)
+            station.grid:get(1, 1):handleTerminals(doNotHandleThis)
+            station.grid:get(2, 0):handleTerminals(handleLeftTerminalsForPlatform)
+            station.grid:get(2, 1):handleTerminals(handleLeftTerminalsForPlatform)
+
+            terminalHandler:addTerminalsFromGrid(station.grid, result)
+
+            assert.are.same({
+                models = {{
+                    id = 'cargo_terminal_right.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'cargo_terminal_right.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'vehicle_terminal_top_left.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'cargo_terminal_zigzag.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'cargo_terminal_zigzag.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'vehicle_terminal_zigzag.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'cargo_terminal_left.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'cargo_terminal_left.mdl',
+                    transf = identMatrix
+                }, {
+                    id = 'vehicle_terminal_top_right.mdl',
+                    transf = identMatrix
+                }},
+                terminalGroups = {
+                    {
+                        terminals = {{2, 0}, {0, 0}, {1, 0}}
+                    }, {
+                        terminals = {{5, 0}, {3, 0}, {4, 0}}
+                    }, {
+                        terminals = {{8, 0}, {6, 0}, {7, 0}}
+                    },
+                },
+                stations = {
+                    {
+                        tag = 1,
+                        terminals = {0, 1, 2}
+                    }
+                }
+            }, result)
+        end)
     end)
 
     describe('addNonTerminalLanesFromGrid', function ()

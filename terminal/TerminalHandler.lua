@@ -25,13 +25,22 @@ function TerminalHandler:addTerminalsFromGrid(grid, result, edgeListMap)
             result = result,
             edgeListMap = edgeListMap
         }
+        local ownTerminalGroupHandler = TerminalGroupHandler:new{
+            neighborDirection = 'self',
+            neighborGridX = column.gridX,
+            grid = grid,
+            result = result,
+            edgeListMap = edgeListMap
+        }
 
         column:eachWithEmpty(function (gridModule)
             leftTerminalGroupHandler:handle(gridModule)
             rightTerminalGroupHandler:handle(gridModule)
+            ownTerminalGroupHandler:handle(gridModule)
         end)
         leftTerminalGroupHandler:finalize()
         rightTerminalGroupHandler:finalize()
+        ownTerminalGroupHandler:finalize()
     end)
 end
 

@@ -188,6 +188,10 @@ function GridModuleBase:canCallTerminalHandleFunc(terminalGroup)
         return false
     end
 
+    if terminalGroup.platformDirection == 'self' then
+        return self:getOption('isZigzag', false)
+    end
+
     if self:isTerminalLeft(terminalGroup) then
         return not self.hasTerminalsLeft
     end
